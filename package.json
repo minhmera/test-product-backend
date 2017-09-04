@@ -4,12 +4,23 @@
   "description": "The project to help famers get anything to grow up",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www"
   },
   "keywords": [
     "nong",
     "nghiep"
   ],
   "author": "NhatMinh Nguyen",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "debug": "^3.0.1",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "mongoose": "^4.11.9",
+    "morgan": "^1.8.2",
+    "serve-favicon": "^2.4.3"
+  }
 }

@@ -13,8 +13,10 @@ router.get('/', function(req, res, next) {
 
 /* POST /todos */
 router.post('/', function(req, res, next) {
+  console.log('****   req  ',req.body)
   Todo.create(req.body, function (err, post) {
     if (err) return next(err);
+    console.log('****   user  ',post)
     res.json(post);
   });
 });
