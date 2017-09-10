@@ -8,8 +8,11 @@ router.get('/', function(req, res, next) {
 
     News.find(function (err, news) {
         if (err) return next(err);
-        console.log('*****  news ',news)
-        res.json(news);
+        console.log('*****  news length ',news.length)
+        //res.json(news);
+        res.json({result:news})
+
+
     });
 });
 
@@ -33,8 +36,14 @@ router.get('/:id', function(req, res, next) {
 
 /* PUT /todos/:id */
 router.put('/:id', function(req, res, next) {
+    console.log('***   req.params.id  ',req.params.id)
+    console.log('***   req.body   ',req.body)
     News.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-        if (err) return next(err);
+        if (err)
+        {
+            console.log('***   Error ',err)
+            return next(err)
+        };
         res.json(post);
     });
 });

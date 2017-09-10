@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var NewsSchema = new mongoose.Schema({
     title: String,
     description: String,
-    createDate: String,
+    photoUrl: String,
+    createDate: {type: Date, default: Date.now} ,
 
 });
 
