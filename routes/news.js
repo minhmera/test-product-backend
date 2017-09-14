@@ -3,10 +3,30 @@ var router = express.Router();
 
 var News = require('../models/news');
 
+// /* GET /todos listing. */
+// router.get('/', function(req, res, next) {
+//
+//     News.find(function (err, news) {
+//         if (err) return next(err);
+//         console.log('*****  news length ',news.length)
+//         //res.json(news);
+//         res.json({result:news})
+//
+//
+//     });
+// });
+
+
 /* GET /todos listing. */
 router.get('/', function(req, res, next) {
 
-    News.find(function (err, news) {
+
+
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
+    var skip = page > 0 ? ((page - 1) * size) : 0;
+
+    News.find(null, null, {skip: skip, limit: size},function (err, news) {
         if (err) return next(err);
         console.log('*****  news length ',news.length)
         //res.json(news);
@@ -15,6 +35,10 @@ router.get('/', function(req, res, next) {
 
     });
 });
+
+
+
+
 
 /* POST /news */
 router.post('/', function(req, res, next) {
