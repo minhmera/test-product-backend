@@ -26,11 +26,19 @@ router.get('/', function(req, res, next) {
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
+
+
     News.find(null, null, {skip: skip, limit: size},function (err, news) {
         if (err) return next(err);
         console.log('*****  news length ',news.length)
         //res.json(news);
-        res.json({result:news})
+        // res.json({result:news})
+        setTimeout(function()
+        {
+            //console.log('your name')
+            res.json({result:news})
+
+        },2000);
 
 
     });
