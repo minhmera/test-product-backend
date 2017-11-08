@@ -6,10 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var todos = require('./routes/todos');
 var news = require('./routes/news');
-var authentication = require('./routes/auth');
 
 // load mongoose package
 var mongoose = require('mongoose');
@@ -37,12 +35,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/todos', todos);
 app.use('/news', news);
-app.use('/auth', authentication);
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
