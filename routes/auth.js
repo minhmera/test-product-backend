@@ -2,6 +2,9 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 
+var Users = require('../models/user');
+
+
 router.get('/', function(req, res, next) {
     res.render('auth.ejs', { title: 'Express' });
 });
@@ -26,7 +29,7 @@ router.get('/logout', function(req, res) {
 router.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/profile',
     failureRedirect: '/auth/signup',
-    failureFlash: true,
+   // failureFlash: true,
 }));
 
 router.post('/login', passport.authenticate('local-login', {
@@ -34,6 +37,25 @@ router.post('/login', passport.authenticate('local-login', {
     failureRedirect: '/login',
     failureFlash: true,
 }));
+
+
+
+// ************    Test
+
+// /* GET /todos listing. */
+router.get('/users', function(req, res, next) {
+
+    Users.find(function (err, news) {
+        if (err) return next(err);
+        console.log('*****  Users length ',news.length)
+        //res.json(news);
+        res.json({result:news})
+
+
+    });
+});
+
+
 
 module.exports = router;
 
