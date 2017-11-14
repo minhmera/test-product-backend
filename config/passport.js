@@ -58,13 +58,23 @@ module.exports = function(passport) {
             passReqToCallback: true,
         },
         function(req, email, password, done) {
+            console.log('**************   Login   ********** ')
             User.findOne({ 'local.email':  email }, function(err, user) {
-                if (err)
+                if (err){
+                    console.log('***  Error    ',err)
                     return done(err);
-                if (!user)
+                }
+
+                if (!user){
+                    console.log('***  No user found ')
                     return done(null, false, req.flash('loginMessage', 'No user found.'));
-                if (!user.validPassword(password))
+                }
+
+                if (!user.validPassword(password)){
+                    console.log('***  Wrong password. ')
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                }
+
                 return done(null, user);
             });
         }));

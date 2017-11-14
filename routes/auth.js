@@ -13,6 +13,18 @@ router.get('/login', function(req, res, next) {
     res.render('login.ejs', { message: req.flash('loginMessage') });
 });
 
+router.get('/loginFailed', function(req, res, next) {
+    res.json({result:'Login failed'})
+    //res.render('login.ejs', { message: req.flash('loginMessage') });
+});
+
+router.get('/loginSuccess', function(req, res, next) {
+    console.log('***   loginSuccess   ',req.user)
+    res.json({result:req.user})
+    //res.render('login.ejs', { message: req.flash('loginMessage') });
+});
+
+
 router.get('/signup', function(req, res) {
     res.render('signup.ejs', { message: req.flash('loginMessage') });
 });
@@ -33,8 +45,9 @@ router.post('/signup', passport.authenticate('local-signup', {
 }));
 
 router.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/profile',
-    failureRedirect: '/login',
+    //successRedirect: '/auth/profile',
+    successRedirect: '/auth/loginSuccess',
+    failureRedirect: '/auth/loginFailed',
     failureFlash: true,
 }));
 
@@ -52,6 +65,14 @@ router.get('/users', function(req, res, next) {
         res.json({result:news})
 
 
+    });
+});
+
+/* DELETE /todos/:id */
+router.delete('/users/:id', function(req, res, next) {
+    Users.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+        if (err) return next(err);
+        res.json(post);
     });
 });
 
