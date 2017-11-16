@@ -1,9 +1,9 @@
 var express = require('express');
 var passport = require('passport');
 var router = express.Router();
-
+var jwt = require('jsonwebtoken');
 var Users = require('../models/user');
-
+var config  = require('../config/config')
 
 router.get('/', function(req, res, next) {
     res.render('auth.ejs', { title: 'Express' });
@@ -19,8 +19,18 @@ router.get('/loginFailed', function(req, res, next) {
 });
 
 router.get('/loginSuccess', function(req, res, next) {
-    console.log('***   loginSuccess   ',req.user)
-    res.json({result:req.user})
+    const payload = {
+        sub: req.user._id
+    };
+    const token = jwt.sign(payload, config.jwtSecret);
+    console.log('******* token   ',token)
+    console.log('***   loginSuccess   user ',req.user)
+
+    var resultObj = {
+        userInfo: req.user,
+        token: token
+    }
+    res.json({result:resultObj})
     //res.render('login.ejs', { message: req.flash('loginMessage') });
 });
 

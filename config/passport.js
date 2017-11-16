@@ -2,17 +2,21 @@
 
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
-
+var jwt = require('jsonwebtoken');
 // load up the user model
 var User       		= require('../models/user');
+var config  = require('../config/config')
+
 
 module.exports = function(passport) {
 
     passport.serializeUser(function(user, done) {
+        console.log('*** serializeUser  ')
         done(null, user.id);
     });
 
     passport.deserializeUser(function(id, done) {
+        console.log('*** deserializeUser  ')
         User.findById(id, function(err, user) {
             done(err, user);
         });
@@ -55,6 +59,7 @@ module.exports = function(passport) {
     passport.use('local-login', new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password',
+            session: false,
             passReqToCallback: true,
         },
         function(req, email, password, done) {
@@ -75,7 +80,7 @@ module.exports = function(passport) {
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
                 }
 
-                return done(null, user);
+                return done(null,user);
             });
         }));
 
