@@ -18,6 +18,10 @@ var mongoose = require('mongoose');
 // Use native Node promises
 mongoose.Promise = global.Promise;
 
+
+// set middleware
+const authCheckMiddleware = require('./middleware/auth-check');
+
 // connect to MongoDB
 mongoose.connect('mongodb://localhost/nong-nghiep')
     .then(()=>  console.log('connection to nong-nghiep succesful'))
@@ -29,7 +33,6 @@ var app = express();
 var flash = require('connect-flash');
 var session = require('express-session');
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'shhsecret' }));
@@ -51,6 +54,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//config middleware
+//app.use('/auth', authCheckMiddleware);
+app.use('/news', authCheckMiddleware);
+
+// config routers
 app.use('/', routes);
 app.use('/todos', todos);
 app.use('/news', news);
