@@ -19,6 +19,7 @@
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "debug": "^3.0.1",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
@@ -34,5 +35,8 @@
     "passport-local": "~1.0.0",
     "passport-twitter": "^1.0.3",
     "serve-favicon": "^2.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.3"
   }
 }

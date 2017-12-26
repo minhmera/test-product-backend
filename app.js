@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var cors =  require('cors');
 
 //define routers
 var routes = require('./routes/index');
@@ -56,7 +56,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //config middleware
 //app.use('/auth', authCheckMiddleware);
-app.use('/news', authCheckMiddleware);
+//app.use('/news', authCheckMiddleware);
+
 
 // config routers
 app.use('/', routes);
@@ -66,10 +67,18 @@ app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    console.log('******************    catch 404 and forward to error handler  ******************')
     err.status = 404;
     next(err);
 });
+
+// Enable Cors
+// app.use(function(req, res, next) {
+//     console.log('******************    Enable Cross domain  ******************')
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 
 // error handlers
 
