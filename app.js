@@ -10,6 +10,7 @@ var cors =  require('cors');
 var routes = require('./routes/index');
 var todos = require('./routes/todos');
 var news = require('./routes/news');
+var categories = require('./routes/categories');
 var auth = require('./routes/auth');
 
 // load mongoose package
@@ -22,10 +23,16 @@ mongoose.Promise = global.Promise;
 // set middleware
 const authCheckMiddleware = require('./middleware/auth-check');
 
-// connect to MongoDB
-mongoose.connect('mongodb://localhost/nong-nghiep')
+// connect to local  MongoDB
+// mongoose.connect('mongodb://localhost/product_banle_beta')
+//     .then(()=>  console.log('connection to nong-nghiep succesful'))
+// .catch((err) => console.error(err));
+
+// connect to Server MongoDB
+mongoose.connect('mongodb://heroku_n1w7rslr:m3f4hhv8vb2hsgfp5rq1v3p5r4@ds129484.mlab.com:29484/heroku_n1w7rslr')
     .then(()=>  console.log('connection to nong-nghiep succesful'))
-.catch((err) => console.error(err));
+    .catch((err) => console.error(' connection to mongodb has error  ',err));
+
 
 var app = express();
 
@@ -63,6 +70,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/todos', todos);
 app.use('/news', news);
+app.use('/categories', categories);
 app.use('/auth', auth);
 
 // catch 404 and forward to error handler
