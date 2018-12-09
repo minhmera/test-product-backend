@@ -12,13 +12,12 @@
     "nghiep"
   ],
   "engines": {
-    "node": "10.14.1",
-    "npm": "6.4.1"
+    "node": "10.14.1"
   },
   "author": "NhatMinh Nguyen",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^3.0.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
