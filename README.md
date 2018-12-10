@@ -22,8 +22,8 @@
   - Config environment
    + Open project on Xcode > FinformApp > Supporting Files > FinformPrefixHeader.pch
    ```objective-c
-   //#define APP_PRODUCTION 1     --> uncomment this line to build on production environment
-   //#define APP_INTEGRATION 1    --> uncomment this line to build on integration environment
-   //#define APP_TEST 1           --> uncomment this line to build on test environment
+   //#define APP_PRODUCTION 1     --> uncomment this line to build on PRODUCTION environment
+   //#define APP_INTEGRATION 1    --> uncomment this line to build on INTEGRATION environment
+   //#define APP_TEST 1           --> uncomment this line to build on TEST environment
    ```
    + Default config is build on Test environment
