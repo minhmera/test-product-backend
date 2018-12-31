@@ -51,6 +51,7 @@ router.get('/', function(req, res, next) {
 /* POST /news */
 router.post('/', function(req, res, next) {
     console.log('**** POST  News   ',req.body)
+    console.log('**** POST  News  title  ',req.body.title)
     News.create(req.body, function (err, post) {
         if (err) return next(err);
         console.log('****   post news  ',post)

@@ -43,8 +43,8 @@ var app = express();
 var flash = require('connect-flash');
 var session = require('express-session');
 var passport = require('passport');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.json());
 app.use(session({ secret: 'shhsecret' }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -61,8 +61,10 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.text({type: 'text/plain'}))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 //config middleware
 //app.use('/auth', authCheckMiddleware);
