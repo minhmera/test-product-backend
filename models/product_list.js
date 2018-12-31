@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
 
-var CategorySchema = new mongoose.Schema({
+var ProductListSchema = new mongoose.Schema({
     title: String,
-    type: Number,
     description: String,
     photoUrl: String,
     order:Number,
@@ -10,4 +9,4 @@ var CategorySchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('Categories', CategorySchema);
+module.exports = mongoose.model('ProductList', ProductListSchema);
