@@ -7,24 +7,12 @@ var ProductList = require('../models/product_list');
 router.get('/', function(req, res, next) {
 
 
+    console.log('query   ===>   ',req.query)
 
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
-    var skip = page > 0 ? ((page - 1) * size) : 0;
-
-    ProductList.find(null, null, {skip: skip, limit: size},function (err, news) {
+    ProductList.find({"type": req.query.type},function (err, products) {
         if (err) return next(err);
-        console.log('***** Get categories length ',news.length)
-        //res.json(news);
-        // res.json({result:news})
-        setTimeout(function()
-        {
-            //console.log('your name')
-            res.json({result:news})
-
-        },2000);
-
-
+        console.log('***** Get products length ',products)
+        res.json({result:products})
     });
 });
 

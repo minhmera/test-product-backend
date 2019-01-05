@@ -5,25 +5,10 @@ var Categories = require('../models/categories');
 
 /* GET /todos listing. */
 router.get('/', function(req, res, next) {
-
-
-
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
-    var skip = page > 0 ? ((page - 1) * size) : 0;
-
-    Categories.find(null, null, {skip: skip, limit: size},function (err, news) {
+    Categories.find(null, null, {skip: skip, limit: size},function (err, categories) {
         if (err) return next(err);
-        console.log('***** Get categories length ',news.length)
-        //res.json(news);
-        // res.json({result:news})
-        setTimeout(function()
-        {
-            //console.log('your name')
-            res.json({result:news})
-
-        },2000);
-
+        console.log('***** Get categories length ',categories.length)
+        res.json({result:categories})
 
     });
 });
