@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
         console.log('***** Get categories length ',categories.length)
         res.json({result:categories})
 
-    });
+    }).sort({"order": 1});
 });
 
 
