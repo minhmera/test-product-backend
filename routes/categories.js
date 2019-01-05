@@ -5,7 +5,7 @@ var Categories = require('../models/categories');
 
 /* GET /todos listing. */
 router.get('/', function(req, res, next) {
-    Categories.find(null, null, {skip: skip, limit: size},function (err, categories) {
+    Categories.find(function (err, categories) {
         if (err) return next(err);
         console.log('***** Get categories length ',categories.length)
         res.json({result:categories})
