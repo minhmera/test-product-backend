@@ -12,6 +12,7 @@ var todos = require('./routes/todos');
 var news = require('./routes/news');
 var categories = require('./routes/categories');
 var productList = require('./routes/product_list');
+var getLocation = require('./routes/get_location');
 var auth = require('./routes/auth');
 
 // load mongoose package
@@ -77,6 +78,7 @@ app.use('/todos', todos);
 app.use('/news', news);
 app.use('/categories', categories);
 app.use('/productList', productList);
+app.use('/getLocation', getLocation);
 app.use('/auth', auth);
 
 // catch 404 and forward to error handler
