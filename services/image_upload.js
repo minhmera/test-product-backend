@@ -72,9 +72,12 @@ const multerS3Config = multerS3({
     metadata: function (req, file, cb) {
         cb(null, { fieldName: file.fieldname });
     },
-    key: function (req, file, cb) {
-        console.log(file)
-        cb(null, Date.now().toString() + '-' + file.originalname)
+    key: function (req, file, callback) {
+        var newFileName = Date.now() + "-" + file.originalname;
+        var fullPath = 'user_upload/images/'+ newFileName;
+        console.log(" fullPath  ==>  ", fullPath)
+        callback(null, fullPath);
+        //callback(null, Date.now().toString() + '-' + file.originalname)
     }
 });
 
