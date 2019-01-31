@@ -5,7 +5,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 var jwt = require('jsonwebtoken');
 // load up the user model
 var User       		= require('../models/user');
-var config  = require('../config/config')
+var config  = require('./config')
 
 
 module.exports = function(passport) {
