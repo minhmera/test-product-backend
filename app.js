@@ -34,7 +34,7 @@ const authCheckMiddleware = require('./middleware/auth-check');
 // connect to Server MongoDB
 
 var configDB = require('./config/database.js');
-mongoose.connect(configDB.urlHeroku)
+mongoose.connect(configDB.urlLocal)
     .then(()=>  console.log('connection to nong-nghiep succesful'))
     .catch((err) => console.error(' connection to mongodb has error  ',err));
 

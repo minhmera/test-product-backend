@@ -34,6 +34,24 @@ router.get('/loginSuccess', function(req, res, next) {
     //res.render('login.ejs', { message: req.flash('loginMessage') });
 });
 
+router.get('/signupSuccess', function(req, res, next) {
+    const payload = {
+        sub: req.user._id
+    };
+    console.log('***   signup Success   user ',req.user)
+
+    var resultObj = {
+        userInfo: req.user,
+    }
+    res.json({result:resultObj})
+    //res.render('login.ejs', { message: req.flash('loginMessage') });
+});
+
+router.get('/signupFailed', function(req, res, next) {
+    res.json({result:'Login failed'})
+    //res.render('login.ejs', { message: req.flash('loginMessage') });
+});
+
 
 router.get('/signup', function(req, res) {
     res.render('signup.ejs', { message: req.flash('loginMessage') });
@@ -49,9 +67,9 @@ router.get('/logout', function(req, res) {
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/profile',
-    failureRedirect: '/auth/signup',
-   // failureFlash: true,
+    successRedirect: '/auth/signupSuccess',
+    failureRedirect: '/auth/signupFailed',
+    failureFlash: true,
 }));
 
 router.post('/login', passport.authenticate('local-login', {
