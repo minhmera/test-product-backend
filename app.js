@@ -40,7 +40,7 @@ mongoose.connect(configDB.urlHeroku)
 
 
 var app = express();
-
+app.use(cors({origin: 'http://localhost:3000'}));
 // Config auth
 var flash = require('connect-flash');
 var session = require('express-session');
@@ -90,8 +90,6 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-// Enable Cors
-app.use(cors())
 
 
 // error handlers
