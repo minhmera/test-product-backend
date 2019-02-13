@@ -34,7 +34,7 @@ const authCheckMiddleware = require('./middleware/auth-check');
 // connect to Server MongoDB
 
 var configDB = require('./config/database.js');
-mongoose.connect(configDB.urlLocal)
+mongoose.connect(configDB.urlHeroku)
     .then(()=>  console.log('connection to nong-nghiep succesful'))
     .catch((err) => console.error(' connection to mongodb has error  ',err));
 
@@ -91,12 +91,12 @@ app.use(function(req, res, next) {
 });
 
 // Enable Cors
-// app.use(function(req, res, next) {
-//     console.log('******************    Enable Cross domain  ******************')
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-// });
+app.use(function(req, res, next) {
+    console.log('******************    Enable Cross domain  ******************')
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // error handlers
 
