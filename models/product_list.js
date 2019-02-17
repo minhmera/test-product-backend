@@ -6,6 +6,7 @@ var ProductListSchema = new mongoose.Schema({
     photoUrl: String,
     order:Number,
     type:Number,
+    location:String,
     createDate: {type: Date, default: Date.now} ,
 
 });
