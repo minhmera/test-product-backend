@@ -84,6 +84,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //config middleware
 //app.use('/auth', authCheckMiddleware);
 app.use('/productList', authCheckMiddleware);
+//app.use('/image-upload', authCheckMiddleware);
 
 
 // config routers
