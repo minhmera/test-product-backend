@@ -4,15 +4,34 @@ const upload = require('../services/image_upload');
 const config = require('../config/config');
 const singleUpload = upload.single('image')
 
-router.post('/', function(req, res) {
-    console.log(' ******  Upload image  ',config.AWS_ACCESS_KEY_ID, "AWS_SECRET_ACCESS_KEY  ==> ",config.AWS_SECRET_ACCESS_KEY)
+const multipleUpload = upload.array("images",3)
 
-    singleUpload(req, res, function(err, some) {
+router.post('/', function(req, res) {
+    //console.log(' ******  Upload image  ',config.AWS_ACCESS_KEY_ID, "AWS_SECRET_ACCESS_KEY  ==> ",config.AWS_SECRET_ACCESS_KEY)
+
+    // singleUpload(req, res, function(err, some) {
+    //     console.log("singleUpload   req.file  ==>  ",req.file)
+    //     if (err) {
+    //         return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+    //     }
+
+    //     return res.json({'imageUrl': req.file.location});
+    // });
+
+    multipleUpload(req, res, function(err, some) {
+        //console.log("multipleUpload   ==>  req",req.files)
+        let imagesReq = []
         if (err) {
             return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
         }
-
-        return res.json({'imageUrl': req.file.location});
+        //console.log(" res  :==>  ",res)
+        if(req.files){
+            req.files.map((item,index)=>{
+                //console.log(" item ==>  ", item)
+                imagesReq.push(item.location)
+            })
+        }
+        return res.json({'imageUrls': imagesReq});
     });
 })
 
