@@ -41,15 +41,21 @@ router.get('/signupSuccess', function(req, res, next) {
     console.log('***   signup Success   user ',req.user)
 
     var resultObj = {
+        success:true,
+        message:"Register user has successfully",
         userInfo: req.user,
     }
     res.json({result:resultObj})
-    //res.render('login.ejs', { message: req.flash('loginMessage') });
 });
 
 router.get('/signupFailed', function(req, res, next) {
-    res.json({result:'Login failed'})
-    //res.render('login.ejs', { message: req.flash('loginMessage') });
+    let msg =  req.flash('signupMessage')[0]
+    var resultObj = {
+        success:false,
+        message:msg,
+        userInfo: null,
+    }
+    res.json({result:resultObj})
 });
 
 

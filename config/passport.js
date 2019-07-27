@@ -30,16 +30,19 @@ module.exports = function(passport) {
         function(req, email, password, done) {
             process.nextTick(function() {
                 User.findOne({ 'local.email':  email }, function(err, user) {
-                    console.log('**** findOne email   ',email)
+                    //console.log('**** findOne email   ',email)
                     console.log('**** findOne  user ',user)
                     console.log('**** findOne  err ',err)
                     if (err){
                         console.log('**** Sign Up err  ',err)
                         return done(err);
                     }
+                    if(password.length < 8){
+                        return done(null, false, req.flash('signupMessage', 'Password must be longer than 8 characters'));
+                    }
 
                     if (user) {
-                        console.log('**** Sign Up user  ',user)
+                        console.log('--------------- Sign Up user ------------------ ')
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
                         var newUser = new User();
