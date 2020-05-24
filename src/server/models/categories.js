@@ -1,12 +1,14 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var CategorySchema = new mongoose.Schema({
-    title: String,
-    type: Number,
-    description: String,
-    photoUrl: String,
-    order:Number,
-    createDate: {type: Date, default: Date.now} ,
+const CategorySchema = new mongoose.Schema({
+  title_vi: String,
+  title_en: String,
+  description_vi: String,
+  description_en: String,
+  photoUrl: String,
+  type: Number,
+  order: Number,
+  createDate: { type: Date, default: Date.now },
 
 });
 

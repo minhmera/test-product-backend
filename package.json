@@ -11,7 +11,8 @@
     "start-dev": "npm run build-dev && node src/server/app.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon src/server/app.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "lint": "eslint --fix --ext .js,.jsx ."
   },
   "keywords": [
     "nong",

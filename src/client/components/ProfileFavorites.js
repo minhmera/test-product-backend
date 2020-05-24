@@ -1,18 +1,16 @@
-import { Profile, mapStateToProps } from './Profile';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import agent from '../agent';
 import { connect } from 'react-redux';
+import agent from '../agent';
+import { Profile, mapStateToProps } from './Profile';
 import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED
 } from '../constants/actionTypes';
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: (pager, payload) =>
-    dispatch({ type: PROFILE_PAGE_LOADED, pager, payload }),
-  onUnload: () =>
-    dispatch({ type: PROFILE_PAGE_UNLOADED })
+  onLoad: (pager, payload) => dispatch({ type: PROFILE_PAGE_LOADED, pager, payload }),
+  onUnload: () => dispatch({ type: PROFILE_PAGE_UNLOADED })
 });
 
 class ProfileFavorites extends Profile {
@@ -33,7 +31,8 @@ class ProfileFavorites extends Profile {
         <li className="nav-item">
           <Link
             className="nav-link"
-            to={`/@${this.props.profile.username}`}>
+            to={`/@${this.props.profile.username}`}
+          >
             My Articles
           </Link>
         </li>
@@ -41,7 +40,8 @@ class ProfileFavorites extends Profile {
         <li className="nav-item">
           <Link
             className="nav-link active"
-            to={`/@${this.props.profile.username}/favorites`}>
+            to={`/@${this.props.profile.username}/favorites`}
+          >
             Favorited Articles
           </Link>
         </li>

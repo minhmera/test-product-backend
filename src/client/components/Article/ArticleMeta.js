@@ -1,8 +1,8 @@
-import ArticleActions from './ArticleActions';
 import { Link } from 'react-router-dom';
 import React from 'react';
+import ArticleActions from './ArticleActions';
 
-const ArticleMeta = props => {
+const ArticleMeta = (props) => {
   const article = props.article;
   return (
     <div className="article-meta">

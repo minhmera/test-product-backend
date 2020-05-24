@@ -19,12 +19,12 @@ export default (state = {}, action) => {
       return {
         ...state,
         commentErrors: action.error ? action.payload.errors : null,
-        comments: action.error ?
-          null :
-          (state.comments || []).concat([action.payload.comment])
+        comments: action.error
+          ? null
+          : (state.comments || []).concat([action.payload.comment])
       };
     case DELETE_COMMENT:
-      const commentId = action.commentId
+      const commentId = action.commentId;
       return {
         ...state,
         comments: state.comments.filter(comment => comment.id !== commentId)

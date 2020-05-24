@@ -1,8 +1,8 @@
-import ArticleList from './ArticleList';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import agent from '../agent';
 import { connect } from 'react-redux';
+import agent from '../agent';
+import ArticleList from './ArticleList';
 import {
   FOLLOW_USER,
   UNFOLLOW_USER,
@@ -10,20 +10,23 @@ import {
   PROFILE_PAGE_UNLOADED
 } from '../constants/actionTypes';
 
-const EditProfileSettings = props => {
+const EditProfileSettings = (props) => {
   if (props.isUser) {
     return (
       <Link
         to="/settings"
-        className="btn btn-sm btn-outline-secondary action-btn">
-        <i className="ion-gear-a"></i> Edit Profile Settings
+        className="btn btn-sm btn-outline-secondary action-btn"
+      >
+        <i className="ion-gear-a" />
+        {' '}
+Edit Profile Settings
       </Link>
     );
   }
   return null;
 };
 
-const FollowUserButton = props => {
+const FollowUserButton = (props) => {
   if (props.isUser) {
     return null;
   }
@@ -35,22 +38,25 @@ const FollowUserButton = props => {
     classes += ' btn-outline-secondary';
   }
 
-  const handleClick = ev => {
+  const handleClick = (ev) => {
     ev.preventDefault();
     if (props.user.following) {
-      props.unfollow(props.user.username)
+      props.unfollow(props.user.username);
     } else {
-      props.follow(props.user.username)
+      props.follow(props.user.username);
     }
   };
 
   return (
     <button
       className={classes}
-      onClick={handleClick}>
-      <i className="ion-plus-round"></i>
+      onClick={handleClick}
+    >
+      <i className="ion-plus-round" />
       &nbsp;
-      {props.user.following ? 'Unfollow' : 'Follow'} {props.user.username}
+      {props.user.following ? 'Unfollow' : 'Follow'}
+      {' '}
+      {props.user.username}
     </button>
   );
 };
@@ -92,7 +98,8 @@ class Profile extends React.Component {
         <li className="nav-item">
           <Link
             className="nav-link active"
-            to={`/@${this.props.profile.username}`}>
+            to={`/@${this.props.profile.username}`}
+          >
             My Articles
           </Link>
         </li>
@@ -100,7 +107,8 @@ class Profile extends React.Component {
         <li className="nav-item">
           <Link
             className="nav-link"
-            to={`/@${this.props.profile.username}/favorites`}>
+            to={`/@${this.props.profile.username}/favorites`}
+          >
             Favorited Articles
           </Link>
         </li>
@@ -114,8 +122,8 @@ class Profile extends React.Component {
       return null;
     }
 
-    const isUser = this.props.currentUser &&
-      this.props.profile.username === this.props.currentUser.username;
+    const isUser = this.props.currentUser
+      && this.props.profile.username === this.props.currentUser.username;
 
     return (
       <div className="profile-page">
@@ -135,7 +143,7 @@ class Profile extends React.Component {
                   user={profile}
                   follow={this.props.onFollow}
                   unfollow={this.props.onUnfollow}
-                  />
+                />
 
               </div>
             </div>
@@ -155,7 +163,8 @@ class Profile extends React.Component {
                 pager={this.props.pager}
                 articles={this.props.articles}
                 articlesCount={this.props.articlesCount}
-                state={this.props.currentPage} />
+                state={this.props.currentPage}
+              />
             </div>
 
           </div>

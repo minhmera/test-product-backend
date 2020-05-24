@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var NewsSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    photoUrl: String,
-    createDate: {type: Date, default: Date.now} ,
+const NewsSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  photoUrl: String,
+  createDate: { type: Date, default: Date.now },
 
 });
 

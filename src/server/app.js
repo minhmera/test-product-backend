@@ -1,23 +1,23 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var cors =  require('cors');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-//define routers
-var routes = require('./routes/index');
-var todos = require('./routes/todos');
-var news = require('./routes/news');
-var categories = require('./routes/categories');
-var productList = require('./routes/product_list');
-var getLocation = require('./routes/get_location');
-var imageUpload = require('./routes/image_upload');
-var auth = require('./routes/auth');
+// define routers
+const mongoose = require('mongoose');
+const routes = require('./routes/index');
+const todos = require('./routes/todos');
+const news = require('./routes/news');
+const categories = require('./routes/categories');
+const productList = require('./routes/product_list');
+const getLocation = require('./routes/get_location');
+const imageUpload = require('./routes/image_upload');
+const auth = require('./routes/auth');
 
 // load mongoose package
-var mongoose = require('mongoose');
 
 // Use native Node promises
 mongoose.Promise = global.Promise;
@@ -33,20 +33,21 @@ const authCheckMiddleware = require('./middleware/auth-check');
 
 // connect to Server MongoDB
 
-var configDB = require('./config/database.js');
+const configDB = require('./config/database.js');
+
 mongoose.connect(configDB.urlHeroku)
-    .then(()=>  console.log('connection to nong-nghiep succesful'))
-    .catch((err) => console.error(' connection to mongodb has error  ',err));
+  .then(() => console.log('============connection to DB is success fully =======', configDB.urlLocal))
+  .catch(err => console.error(' connection to mongodb has error  ', err));
 
 
-var app = express();
+const app = express();
 
 // Config auth
-var flash = require('connect-flash');
-var session = require('express-session');
-var passport = require('passport');
-//app.use(bodyParser.urlencoded({ extended: false }));
-//app.use(bodyParser.json());
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 app.use(session({ secret: 'shhsecret' }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -55,20 +56,19 @@ app.use(flash());
 require('./config/passport')(passport);
 
 
-
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.text({type: 'text/plain'}))
+app.use(bodyParser.text({ type: 'text/plain' }));
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('dist'));
 
-//config middleware
-//app.use('/auth', authCheckMiddleware);
-//app.use('/news', authCheckMiddleware);
+// config middleware
+// app.use('/auth', authCheckMiddleware);
+// app.use('/news', authCheckMiddleware);
 
 
 // config routers
@@ -99,7 +99,7 @@ app.use('/auth', auth);
 // error handlers
 
 // development error handler
-//will print stacktrace
+// will print stacktrace
 // if (app.get('env') === 'development') {
 //     app.use(function(err, req, res, next) {
 //         res.status(err.status || 500);
@@ -122,4 +122,4 @@ app.use('/auth', auth);
 
 app.listen(process.env.PORT || 3000, () => console.log(`Listening on port ${process.env.PORT || 3000}!`));
 
-//module.exports = app;
+// module.exports = app;
