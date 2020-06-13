@@ -2,8 +2,15 @@ var mongoose = require('mongoose');
 
 var ProductListSchema = new mongoose.Schema({
     title: String,
+    harvestDate: String,
+    price:Number,
+    unit:Number,
+    amount:Number,
+    //photoUrl: String,
+    photoUrls: [{
+        type: String
+    }],
     description: String,
-    photoUrl: String,
     order:Number,
     type:Number,
     location:String,

@@ -5,12 +5,13 @@ var ProductList = require('../models/product_list');
 
 /* GET /todos listing. */
 router.get('/', function(req, res, next) {
-
-
     console.log('query   ===>   ',req.query)
-
     ProductList.find({"type": req.query.type},function (err, products) {
-        if (err) return next(err);
+        //if (err) return next(err);
+        if (err)  {
+            console.log('!!!!!!!!!!!!!!!  Get ProductList Error !!!!!!!!!!! ', err)
+            return next(err);
+        }
         console.log('***** Get products length ',products)
         res.json({result:products})
     });
@@ -19,13 +20,21 @@ router.get('/', function(req, res, next) {
 
 
 /* POST /ProductList */
-router.post('/', function(req, res, next) {
+router.post('/create', function(req, res, next) {
     console.log('**** POST  ProductList   ',req.body)
     ProductList.create(req.body, function (err, post) {
-        if (err) return next(err);
-        console.log('****   post ProductList  ',post)
+        if (err)  {
+            console.log('!!!!!!!!!!!!!!!  post ProductList Error !!!!!!!!!!! ', err)
+            return next(err);
+        }
+
+        console.log('****   post ProductList RES ',post.body)
         res.json(post);
     });
+
+
+
+
 });
 
 /* GET /todos/id */

@@ -7,7 +7,7 @@ const singleUpload = upload.single('image')
 const multipleUpload = upload.array("images",3)
 
 router.post('/', function(req, res) {
-    //console.log(' ******  Upload image  ',config.AWS_ACCESS_KEY_ID, "AWS_SECRET_ACCESS_KEY  ==> ",config.AWS_SECRET_ACCESS_KEY)
+    console.log(' ******  Upload image  ',config.AWS_ACCESS_KEY_ID, "AWS_SECRET_ACCESS_KEY  ==> ",config.AWS_SECRET_ACCESS_KEY)
 
     // singleUpload(req, res, function(err, some) {
     //     console.log("singleUpload   req.file  ==>  ",req.file)
@@ -18,13 +18,15 @@ router.post('/', function(req, res) {
     //     return res.json({'imageUrl': req.file.location});
     // });
 
+    console.log('Image Upload ==>  ',req.body)
+
     multipleUpload(req, res, function(err, some) {
         //console.log("multipleUpload   ==>  req",req.files)
         let imagesReq = []
         if (err) {
             return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
         }
-        //console.log(" res  :==>  ",res)
+        console.log(" res  :==>  ",res)
         if(req.files){
             req.files.map((item,index)=>{
                 //console.log(" item ==>  ", item)
