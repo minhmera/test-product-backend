@@ -4,6 +4,7 @@ let locationVNData = require('../resource/location-vn.json');
 
 /* GET /todos listing. */
 router.get('/', function(req, res, next) {
+    //console.log('locationVNData  ==> ', locationVNData)
     res.json({result:locationVNData})
 });
 
