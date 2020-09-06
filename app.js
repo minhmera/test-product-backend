@@ -16,6 +16,11 @@ var getLocation = require('./routes/get_location');
 var imageUpload = require('./routes/image_upload');
 var auth = require('./routes/auth');
 
+var sellingPost = require('./routes/selling_post');
+var buyingPost = require('./routes/buying_post');
+
+
+
 // load mongoose package
 var mongoose = require('mongoose');
 
@@ -98,6 +103,9 @@ app.use('/productList', productList);
 app.use('/getLocation', getLocation);
 app.use('/image-upload', imageUpload);
 app.use('/auth', auth);
+
+app.use('/sellingPost', sellingPost);
+app.use('/buyingPost', buyingPost);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
