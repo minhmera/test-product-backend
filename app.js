@@ -46,7 +46,7 @@ const connectionParams={
     useCreateIndex: true,
     useUnifiedTopology: true
 }
-mongoose.connect(configDB.urlAtlas,connectionParams)
+mongoose.connect(configDB.urlHeroku,connectionParams)
   .then( () => {
       console.log('Connected to database ')
   })
