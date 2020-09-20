@@ -23,6 +23,8 @@ var buyingPost = require('./routes/buying_post');
 
 // load mongoose package
 var mongoose = require('mongoose');
+var mongodb = require('mongodb');
+const MongoClient = require('mongodb').MongoClient;
 
 // Use native Node promises
 mongoose.Promise = global.Promise;
@@ -33,9 +35,25 @@ const authCheckMiddleware = require('./middleware/auth-check');
 
 
 var configDB = require('./config/database.js');
-mongoose.connect(configDB.urlHeroku)
-    .then(()=>  console.log('connection to nong-nghiep succesful'))
-    .catch((err) => console.error(' connection to mongodb has error  ',err));
+// mongoose.connect(configDB.urlHeroku)
+//     .then(()=>  console.log('connection to nong-nghiep succesful'))
+//     .catch((err) => console.error(' connection to mongodb has error  ',err));
+
+
+
+const connectionParams={
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+}
+mongoose.connect(configDB.urlAtlas,connectionParams)
+  .then( () => {
+      console.log('Connected to database ')
+  })
+  .catch( (err) => {
+      console.error(`Error connecting to the database. \n${err}`);
+  })
+
 
 
 var app = express();

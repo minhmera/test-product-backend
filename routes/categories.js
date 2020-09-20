@@ -32,7 +32,12 @@ router.get('/getAll', (req, res, next) => {
 router.post('/createOne', (req, res, next) => {
     console.log('**** POST  Categories   ', req.body);
     Categories.create(req.body, (err, post) => {
-        if (err) return next(err);
+        //if (err) return next(err);
+        if (err) {
+
+            console.log('Error occurred while Create Category...\n', err);
+            return next(err);
+        }
         console.log('****   post Categories  ', post);
         res.json(post);
     });

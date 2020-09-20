@@ -50,6 +50,7 @@ router.get('/signupSuccess', function(req, res, next) {
 
 router.get('/signupFailed', function(req, res, next) {
     let msg =  req.flash('signupMessage')[0]
+    console.log('***   signup Success   user ',req.user)
     var resultObj = {
         success:false,
         message:msg,
