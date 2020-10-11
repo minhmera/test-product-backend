@@ -108,7 +108,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //config middleware
 //app.use('/auth', authCheckMiddleware);
-//app.use('/productList', authCheckMiddleware);
+app.use('/productList', authCheckMiddleware);
+//app.use('/categories', authCheckMiddleware);
 //app.use('/image-upload', authCheckMiddleware);
 
 
@@ -127,7 +128,7 @@ app.use('/buyingPost', buyingPost);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    console.log('******************    catch 404 and forward to error handler  ******************')
+    console.log('******************    catch 404 and forward to error handler  ******************',err)
     err.status = 404;
     next(err);
 });
