@@ -10,7 +10,9 @@ const config = require('../config/config');
 module.exports = (req, res, next) => {
     console.log('****  middleware  req  ', req.headers.authorization, "   Method  ",req.method)
 
-
+    if(req.method == "GET"){
+        return next();
+    }
 
     if (req.headers.authorization == undefined) {
         return res.status(401).end();

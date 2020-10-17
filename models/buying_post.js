@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const BuyingPost = new mongoose.Schema({
+  userId: String,
   categoryId: Number,
   productName: String,
   provinceId: Number,
