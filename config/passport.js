@@ -11,7 +11,7 @@ var config  = require('../config/config')
 module.exports = function(passport) {
 
     passport.serializeUser(function(user, done) {
-        console.log('*** serializeUser  ')
+        console.log('*** serializeUser  ',user)
         done(null, user.id);
     });
 
@@ -23,18 +23,18 @@ module.exports = function(passport) {
     });
 
     passport.use('local-signup', new LocalStrategy({
-            //usernameField: 'email',
             usernameField: 'username',
             passwordField: 'password',
+            fullNameField: 'fullName',
             passReqToCallback: true,
         },
-        //function(req, email, password, done) {
         function(req, username, password, done) {
+            console.log('**** Sign up ==>  user ',req.body)
             process.nextTick(function() {
                 User.findOne({ 'local.username':  username }, function(err, user) {
                     //console.log('**** findOne email   ',email)
-                    console.log('**** findOne  user ',user)
-                    console.log('**** findOne  err ',err)
+                    //console.log('**** findOne  user ',user)
+                    //console.log('**** findOne  err ',err)
                     if (err){
                         console.log('**** Sign Up err  ',err)
                         return done(err);
@@ -52,10 +52,11 @@ module.exports = function(passport) {
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
                         var newUser = new User();
-                        console.log('**** Sign Up newUser  ',newUser)
-                        //newUser.local.email = email;
-                        newUser.local.username = username;
+
+                        newUser.local.username = username
+                        newUser.local.fullName = req.body.fullName
                         newUser.local.password = newUser.generateHash(password);
+                        console.log('**** Sign Up newUser  ',newUser)
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
@@ -67,7 +68,6 @@ module.exports = function(passport) {
         }));
 
     passport.use('local-login', new LocalStrategy({
-            //usernameField: 'email',
             usernameField: 'username',
             passwordField: 'password',
             session: false,

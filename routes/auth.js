@@ -31,7 +31,6 @@ router.get('/loginSuccess', function(req, res, next) {
         token: token
     }
     res.json({result:resultObj})
-    //res.render('login.ejs', { message: req.flash('loginMessage') });
 });
 
 router.get('/signupSuccess', function(req, res, next) {
@@ -80,7 +79,6 @@ router.post('/signup', passport.authenticate('local-signup', {
 }));
 
 router.post('/login', passport.authenticate('local-login', {
-    //successRedirect: '/auth/profile',
     successRedirect: '/auth/loginSuccess',
     failureRedirect: '/auth/loginFailed',
     failureFlash: true,
