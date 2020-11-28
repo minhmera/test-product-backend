@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const SellingPost = new mongoose.Schema({
   userId: String,
+  fullName: String,
   categoryId: Number,
   productName: String,
   photoUrls: Array,
