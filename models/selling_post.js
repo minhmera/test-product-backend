@@ -8,6 +8,8 @@ const SellingPost = new mongoose.Schema({
   photoUrls: Array,
   provinceId: Number,
   districtId: Number,
+  provinceName: String,
+  districtName: String,
   cropDay: Date,
   productCertification: String,
   sellerPhone: String,
