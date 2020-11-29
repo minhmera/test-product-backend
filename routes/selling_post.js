@@ -24,10 +24,10 @@ router.get('/getAll', (req, res, next) => {
 
 });
 
-/** Delete all data from Categoty schema
+//* Delete all data from Categoty schema
  router.get('/deleteAll', (req, res, next) => {
   console.log('*********  deleteAll  category');
-  Categories.remove((err, removed) => {
+     sellingPosts.remove((err, removed) => {
     if (err) return next(err);
     let json = {
       'status': 'remove all is successfully',
@@ -35,7 +35,7 @@ router.get('/getAll', (req, res, next) => {
     res.json(json)
   });
 });
- **/
+
 
 /* POST /Categories */
 router.post('/createOne', (req, res, next) => {

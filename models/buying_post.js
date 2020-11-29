@@ -9,6 +9,7 @@ const BuyingPost = new mongoose.Schema({
   districtId: Number,
   productCertification: String,
   buyerPhone: String,
+  createDate: { type: Date, default: Date.now },
 
 });
 

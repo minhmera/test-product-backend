@@ -11,6 +11,7 @@ const SellingPost = new mongoose.Schema({
   cropDay: Date,
   productCertification: String,
   sellerPhone: String,
+  createDate: { type: Date, default: Date.now },
 
 });
 
