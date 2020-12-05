@@ -7,18 +7,33 @@ const buyingPost = require('../models/buying_post');
 /* GET /todos listing. */
 router.get('/getAll', (req, res, next) => {
   // eslint-disable-next-line array-callback-return
-  buyingPost.find((err, categories) => {
-    if (err) return next(err);
-    console.log('***** Get categories length ', categories.length);
-    res.json({ result: categories });
-  })
-    .sort({ order: 1 });
+  // buyingPost.find((err, categories) => {
+  //   if (err) return next(err);
+  //   console.log('***** Get categories length ', categories.length);
+  //   res.json({ result: categories });
+  // })
+  //   .sort({ order: 1 });
+
+
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
+    var skip = page > 0 ? ((page - 1) * size) : 0;
+
+
+    buyingPost.find(null, null, {skip: skip, limit: size}, function (err, categories) {
+        if (err) return next(err);
+        console.log('***** Get categories length ', categories.length);
+        res.json({result: categories});
+    }).sort({order: 1});
+
+
+
 });
 
-/** Delete all data from Categoty schema
+
  router.get('/deleteAll', (req, res, next) => {
   console.log('*********  deleteAll  category');
-  Categories.remove((err, removed) => {
+   buyingPost.remove((err, removed) => {
     if (err) return next(err);
     let json = {
       'status': 'remove all is successfully',
@@ -26,7 +41,7 @@ router.get('/getAll', (req, res, next) => {
     res.json(json)
   });
 });
- **/
+
 
 /* POST /Categories */
 router.post('/createOne', (req, res, next) => {
