@@ -10,11 +10,6 @@ router.get('/getAll', (req, res, next) => {
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
-    // sellingPosts.find((err, categories) => {
-    //     if (err) return next(err);
-    //     console.log('***** Get categories length ', categories.length);
-    //     res.json({result: categories});
-    // }).sort({order: 1});
     sellingPosts.find(null, null, {skip: skip, limit: size}, function (err, categories) {
         if (err) return next(err);
         console.log('***** Get categories length ', categories.length);
@@ -23,6 +18,29 @@ router.get('/getAll', (req, res, next) => {
 
 
 });
+
+router.get('/getByCategory', function(req, res, next) {
+    console.log('query   ===>   ',req.query)
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
+    var skip = page > 0 ? ((page - 1) * size) : 0;
+
+    var filterOpt = {"categoryId": req.query.categoryId}
+    if (req.query.provinceId) {
+        filterOpt.provinceId = req.query.provinceId
+    }
+
+    sellingPosts.find(
+        filterOpt,
+        {skip: skip, limit: size}, function (err, categories) {
+        if (err) return next(err);
+        console.log('***** Get categories length ', categories.length);
+        res.json({result: categories});
+    }).sort({order: 1});
+
+});
+
+
 
 //* Delete all data from Categoty schema
  router.get('/deleteAll', (req, res, next) => {

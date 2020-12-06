@@ -6,28 +6,31 @@ const buyingPost = require('../models/buying_post');
 
 /* GET /todos listing. */
 router.get('/getAll', (req, res, next) => {
-  // eslint-disable-next-line array-callback-return
-  // buyingPost.find((err, categories) => {
-  //   if (err) return next(err);
-  //   console.log('***** Get categories length ', categories.length);
-  //   res.json({ result: categories });
-  // })
-  //   .sort({ order: 1 });
-
-
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
-
-
     buyingPost.find(null, null, {skip: skip, limit: size}, function (err, categories) {
         if (err) return next(err);
         console.log('***** Get categories length ', categories.length);
         res.json({result: categories});
     }).sort({order: 1});
+});
 
 
+router.get('/getByCategory', (req, res, next) => {
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
+    var skip = page > 0 ? ((page - 1) * size) : 0;
 
+    var filterOpt = {"categoryId": req.query.categoryId}
+    if (req.query.provinceId) {
+        filterOpt.provinceId = req.query.provinceId
+    }
+    buyingPost.find(filterOpt, {skip: skip, limit: size}, function (err, categories) {
+        if (err) return next(err);
+        console.log('***** Get categories length ', categories.length);
+        res.json({result: categories});
+    }).sort({order: 1});
 });
 
 
