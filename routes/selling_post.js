@@ -31,7 +31,7 @@ router.get('/getByCategory', function(req, res, next) {
     }
 
     sellingPosts.find(
-        filterOpt,
+        filterOpt, null,
         {skip: skip, limit: size}, function (err, categories) {
         if (err) return next(err);
         console.log('***** Get categories length ', categories.length);
