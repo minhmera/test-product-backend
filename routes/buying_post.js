@@ -26,11 +26,22 @@ router.get('/getByCategory', (req, res, next) => {
     if (req.query.provinceId) {
         filterOpt.provinceId = req.query.provinceId
     }
-    buyingPost.find(filterOpt, {skip: skip, limit: size}, function (err, categories) {
-        if (err) return next(err);
-        console.log('***** Get categories length ', categories.length);
-        res.json({result: categories});
-    }).sort({order: 1});
+    // Stupid Error
+
+    // buyingPost.find(filterOpt, {skip: skip, limit: size}, function (err, categories) {
+    //     if (err) return next(err);
+    //     console.log('***** Get categories length ', categories.length);
+    //     res.json({result: categories});
+    // }).sort({order: 1});
+
+    buyingPost.find(
+        filterOpt, null,
+        {skip: skip, limit: size}, function (err, categories) {
+            if (err) return next(err);
+            console.log('***** Get categories length ', categories.length);
+            res.json({result: categories});
+        }).sort({order: 1});
+
 });
 
 
