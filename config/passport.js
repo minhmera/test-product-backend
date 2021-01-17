@@ -49,7 +49,7 @@ module.exports = function(passport) {
 
                     if (user) {
                         console.log('--------------- Sign Up user ------------------ ')
-                        return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                        return done(null, false, req.flash('signupMessage', 'Tên này đã được sử dụng'));
                     } else {
                         var newUser = new User();
 
