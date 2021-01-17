@@ -39,8 +39,8 @@ module.exports = function(passport) {
                         console.log('**** Sign Up err  ',err)
                         return done(err);
                     }
-                    if(username.length < 8){
-                        return done(null, false, req.flash('signupMessage', 'Username must be longer than 8 characters'));
+                    if(username.length < 4){
+                        return done(null, false, req.flash('signupMessage', 'Username must be longer than 4 characters'));
                     }
 
                     if(password.length < 8){
