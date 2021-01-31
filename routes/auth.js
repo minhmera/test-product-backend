@@ -1,5 +1,6 @@
 var express = require('express');
 var passport = require('passport');
+var bcrypt   = require('bcrypt')
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var Users = require('../models/user');
@@ -109,7 +110,52 @@ router.delete('/users/:id', function(req, res, next) {
     });
 });
 
+router.get('/updatePassByName/:username', function(req, res, next) {
+    console.log('findUserByName param ==>   ', req.params.username)
 
+    Users.findOne({ 'local.username':  req.params.username }, function(err, user) {
+        console.log('MERA  user  ==>  ', user)
+
+        let randomPass = genRandomPass(8)
+        let hasPass = genHashPass(randomPass)
+
+        let updateUser = {
+           'local.password':hasPass
+        }
+        console.log('MERA  updateUser  ==>  ', updateUser, 'hasPass ==>  ' ,hasPass)
+        Users.findByIdAndUpdate(user._id, updateUser, (err, updatedUser) => {
+            if (err) {
+                console.log('***   Error ', err);
+                return next(err);
+            }
+            let newUser = {
+                newPass: randomPass,
+                updatedUser
+            }
+            console.log('MERA  newUser  ==>  ', newUser)
+            res.json(newUser);
+        });
+
+
+        //res.json(user);
+
+    })
+
+});
+
+function genRandomPass(length) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+function genHashPass(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+}
 
 module.exports = router;
 
