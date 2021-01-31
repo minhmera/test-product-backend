@@ -116,25 +116,31 @@ router.get('/updatePassByName/:username', function(req, res, next) {
     Users.findOne({ 'local.username':  req.params.username }, function(err, user) {
         console.log('MERA  user  ==>  ', user)
 
-        let randomPass = genRandomPass(8)
-        let hasPass = genHashPass(randomPass)
+        if (user) {
+            let randomPass = genRandomPass(8)
+            let hasPass = genHashPass(randomPass)
 
-        let updateUser = {
-           'local.password':hasPass
+            let updateUser = {
+                'local.password':hasPass
+            }
+            console.log('MERA  updateUser  ==>  ', updateUser, 'hasPass ==>  ' ,hasPass)
+            Users.findByIdAndUpdate(user._id, updateUser, (err, updatedUser) => {
+                if (err) {
+                    console.log('***   Error ', err);
+                    return next(err);
+                }
+                let newUser = {
+                    newPass: randomPass,
+                    updatedUser
+                }
+                console.log('MERA  newUser  ==>  ', newUser)
+                res.json(newUser);
+            });
+        } else {
+            res.json(null)
         }
-        console.log('MERA  updateUser  ==>  ', updateUser, 'hasPass ==>  ' ,hasPass)
-        Users.findByIdAndUpdate(user._id, updateUser, (err, updatedUser) => {
-            if (err) {
-                console.log('***   Error ', err);
-                return next(err);
-            }
-            let newUser = {
-                newPass: randomPass,
-                updatedUser
-            }
-            console.log('MERA  newUser  ==>  ', newUser)
-            res.json(newUser);
-        });
+
+
 
 
         //res.json(user);
