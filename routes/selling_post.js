@@ -10,17 +10,23 @@ router.get('/getAll', (req, res, next) => {
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
-    sellingPosts.find(null, null, {skip: skip, limit: size}, function (err, categories) {
-        if (err) return next(err);
-        console.log('***** Get categories length ', categories.length);
-        res.json({result: categories});
-    }).sort({order: 1});
-
+    sellingPosts
+        .find()
+        .skip(skip)
+        .limit(size)
+        .sort({order: 1})
+        .exec((err, products) => {
+            sellingPosts.countDocuments((err, count) => {
+                console.log('All Page ==>  count ', count)
+                if (err) return next(err);
+                res.send(products)
+            });
+        });
 
 });
 
-router.get('/getByCategory', function(req, res, next) {
-    console.log('query   ===>   ',req.query)
+router.get('/getByCategory', function (req, res, next) {
+    console.log('query   ===>   ', req.query)
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
@@ -30,28 +36,31 @@ router.get('/getByCategory', function(req, res, next) {
         filterOpt.provinceId = req.query.provinceId
     }
 
-    sellingPosts.find(
-        filterOpt, null,
-        {skip: skip, limit: size}, function (err, categories) {
-        if (err) return next(err);
-        console.log('***** Get categories length ', categories.length);
-        res.json({result: categories});
-    }).sort({order: 1});
-
+    sellingPosts
+        .find(filterOpt)
+        .skip(skip)
+        .limit(size)
+        .sort({order: 1})
+        .exec((err, products) => {
+            sellingPosts.countDocuments((err, count) => {
+                console.log('All Page ==>  count ', count)
+                if (err) return next(err);
+                res.send(products)
+            });
+        })
 });
 
 
-
 //* Delete all data from Categoty schema
- router.get('/deleteAll', (req, res, next) => {
-  console.log('*********  deleteAll  category');
-     sellingPosts.remove((err, removed) => {
-    if (err) return next(err);
-    let json = {
-      'status': 'remove all is successfully',
-    }
-    res.json(json)
-  });
+router.get('/deleteAll', (req, res, next) => {
+    console.log('*********  deleteAll  category');
+    sellingPosts.remove((err, removed) => {
+        if (err) return next(err);
+        let json = {
+            'status': 'remove all is successfully',
+        }
+        res.json(json)
+    });
 });
 
 

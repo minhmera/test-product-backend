@@ -9,11 +9,20 @@ router.get('/getAll', (req, res, next) => {
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
-    buyingPost.find(null, null, {skip: skip, limit: size}, function (err, categories) {
-        if (err) return next(err);
-        console.log('***** Get categories length ', categories.length);
-        res.json({result: categories});
-    }).sort({order: 1});
+
+
+    buyingPost
+        .find()
+        .skip(skip)
+        .limit(size)
+        .sort({order: 1})
+        .exec((err, products) => {
+            buyingPost.countDocuments((err, count) => {
+                console.log('All Page ==>  count ',count)
+                if (err) return next(err);
+                res.send(products)
+            });
+        });
 });
 
 
@@ -34,14 +43,19 @@ router.get('/getByCategory', (req, res, next) => {
     //     res.json({result: categories});
     // }).sort({order: 1});
 
-    buyingPost.find(
-        filterOpt, null,
-        {skip: skip, limit: size}, function (err, categories) {
-            if (err) return next(err);
-            console.log('***** Get categories length ', categories.length);
-            res.json({result: categories});
-        }).sort({order: 1});
 
+    buyingPost
+        .find(filterOpt)
+        .skip(skip)
+        .limit(size)
+        .sort({order: 1})
+        .exec((err, products) => {
+            buyingPost.countDocuments((err, count) => {
+                console.log('All Page ==>  count ', count)
+                if (err) return next(err);
+                res.send(products)
+            });
+        })
 });
 
 
