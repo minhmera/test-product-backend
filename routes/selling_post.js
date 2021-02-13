@@ -19,7 +19,7 @@ router.get('/getAll', (req, res, next) => {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.send(products)
+                res.json({result: products});
             });
         });
 
@@ -45,7 +45,7 @@ router.get('/getByCategory', function (req, res, next) {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.send(products)
+                res.json({result: products});
             });
         })
 });
