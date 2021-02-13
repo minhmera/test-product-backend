@@ -15,7 +15,7 @@ router.get('/getAll', (req, res, next) => {
         .find()
         .skip(skip)
         .limit(size)
-        .sort({order: 1})
+        //.sort({order: 1})
         .exec((err, products) => {
             buyingPost.countDocuments((err, count) => {
                 console.log('All Page ==>  count ',count)
@@ -48,7 +48,7 @@ router.get('/getByCategory', (req, res, next) => {
         .find(filterOpt)
         .skip(skip)
         .limit(size)
-        .sort({order: 1})
+        //.sort({order: 1})
         .exec((err, products) => {
             buyingPost.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
