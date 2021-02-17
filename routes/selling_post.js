@@ -84,8 +84,8 @@ router.get('/getByUser', function (req, res, next) {
 
     //var filterOpt = {$regex: req.query.productName, $options: 'i'};
 
-    var filterOpt = { userId: { $regex: req.body.userId, $options: 'i' }}
-    console.log('filterOpt   ===>   ', filterOpt)
+    var filterOpt = { userId: { $regex: req.query.userId, $options: 'i' }}
+    console.log('filterOpt   ===>   ', filterOpt, 'req ==> ',req.query)
     //productName
     sellingPosts
         .find(filterOpt)

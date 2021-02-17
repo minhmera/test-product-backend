@@ -64,10 +64,11 @@ router.get('/getByUser', function (req, res, next) {
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
+    console.log('MERA getByUser req.body' )
     //var filterOpt = {$regex: req.query.productName, $options: 'i'};
 
-    var filterOpt = { userId: { $regex: req.body.userId, $options: 'i' }}
-    console.log('filterOpt   ===>   ', filterOpt)
+    var filterOpt = { userId: { $regex: req.query.userId, $options: 'i' }}
+    console.log('filterOpt   ===>   ', filterOpt,' req ==> ', req)
     //productName
     buyingPost
         .find(filterOpt)
