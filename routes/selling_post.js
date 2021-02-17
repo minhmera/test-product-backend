@@ -75,6 +75,36 @@ router.get('/searchSellingPost', function (req, res, next) {
         })
 });
 
+
+router.get('/getByUser', function (req, res, next) {
+
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
+    var skip = page > 0 ? ((page - 1) * size) : 0;
+
+    //var filterOpt = {$regex: req.query.productName, $options: 'i'};
+
+    var filterOpt = { userId: { $regex: req.body.userId, $options: 'i' }}
+    console.log('filterOpt   ===>   ', filterOpt)
+    //productName
+    sellingPosts
+        .find(filterOpt)
+        .skip(skip)
+        .limit(size)
+        //.sort({order: 1})
+        .exec((err, products) => {
+            sellingPosts.countDocuments((err, count) => {
+                console.log('All Page ==>  count ', count)
+                if (err) return next(err);
+                res.json({result: products});
+            });
+        })
+});
+
+
+
+
+
 //* Delete all data from Categoty schema
 router.get('/deleteAll', (req, res, next) => {
     console.log('*********  deleteAll  category');
