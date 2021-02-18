@@ -140,13 +140,28 @@ router.get('/:id', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     console.log('***   req.params.id  ', req.params.id);
     console.log('***   req.body   ', req.body);
-    sellingPosts.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
-        if (err) {
-            console.log('***   Error ', err);
-            return next(err);
+    sellingPosts.findById(req.params.id, (err, post) => {
+        if (err) return next(err);
+        console.log('Find a product first ==>   ',post.userId)
+        //res.json(post);
+        if (post.userId === req.body.userId ) {
+            sellingPosts.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+                if (err) {
+                    console.log('***   Error ', err);
+                    return next(err);
+                }
+                res.json(post);
+            });
+        } else {
+            let errorJson = {
+                "errorMessage":"Không có quyền edidt"
+            }
+            res.status(401).json(errorJson);
         }
-        res.json(post);
+
     });
+
+
 });
 
 /* DELETE /todos/:id */
