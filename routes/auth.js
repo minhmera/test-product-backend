@@ -102,6 +102,80 @@ router.get('/users', function(req, res, next) {
     });
 });
 
+router.post('/userDetail', (req, res, next) => {
+
+    Users.findById(req.body.userId, (err, user) => {
+        if (err) return next(err);
+
+        if(req.body.password === user.local.password) {
+
+            let updatedInfo = user
+
+            console.log('updatedInfo ==>  ',updatedInfo)
+            if (req.body.fullName !== "") {
+                updatedInfo.local.fullName = req.body.fullName
+            }
+            if (req.body.phoneNumber !== "") {
+                updatedInfo.local.phoneNumber = req.body.phoneNumber
+            }
+
+             Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                   if (err) {
+                       console.log('***   Error ', err);
+                       return next(err);
+                   }
+                   res.json(newUser);
+               });
+
+            //res.json(user);
+        } else {
+            let errorJson = {
+                "errorMessage":"Sai password"
+            }
+            res.status(401).json(errorJson);
+        }
+
+    });
+
+
+});
+
+router.post('/changePassword', (req, res, next) => {
+
+    Users.findById(req.body.userId, (err, user) => {
+        if (err) return next(err);
+
+        if(req.body.password === user.local.password) {
+
+            let updatedInfo = user
+
+            console.log('updatedInfo ==>  ',updatedInfo)
+            if (req.body.newPassword !== "") {
+                updatedInfo.local.password = genHashPass(req.body.newPassword)//req.body.newPassword
+            }
+
+
+            Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                if (err) {
+                    console.log('***   Error ', err);
+                    return next(err);
+                }
+                res.json(newUser);
+            });
+
+            //res.json(user);
+        } else {
+            let errorJson = {
+                "errorMessage":"Sai password"
+            }
+            res.status(401).json(errorJson);
+        }
+
+    });
+
+
+});
+
 /* DELETE /todos/:id */
 router.delete('/users/:id', function(req, res, next) {
     Users.findByIdAndRemove(req.params.id, req.body, function (err, post) {

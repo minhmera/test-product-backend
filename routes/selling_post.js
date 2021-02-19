@@ -136,7 +136,6 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-/* PUT /todos/:id */
 router.put('/:id', (req, res, next) => {
     console.log('***   req.params.id  ', req.params.id);
     console.log('***   req.body   ', req.body);

@@ -111,6 +111,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/productList', authCheckMiddleware);
 app.use('/sellingPost', authCheckMiddleware);
 app.use('/buyingPost', authCheckMiddleware);
+//app.use('/auth', authCheckMiddleware);
 //app.use('/categories', authCheckMiddleware);
 //app.use('/image-upload', authCheckMiddleware);
 
