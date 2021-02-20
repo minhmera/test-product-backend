@@ -102,6 +102,17 @@ router.get('/users', function(req, res, next) {
     });
 });
 
+router.get('/userDetail', (req, res, next) => {
+
+    Users.findById(req.body.userId, (err, user) => {
+        if (err) return next(err);
+        res.json(user);
+
+    });
+
+
+});
+
 router.post('/userDetail', (req, res, next) => {
 
     Users.findById(req.body.userId, (err, user) => {

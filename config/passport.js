@@ -7,6 +7,7 @@ var jwt = require('jsonwebtoken');
 var User       		= require('../models/user');
 var config  = require('../config/config')
 
+const POINT_FOR_NEW_USER = 1000
 
 module.exports = function(passport) {
 
@@ -32,9 +33,6 @@ module.exports = function(passport) {
             console.log('**** Sign up ==>  user ',req.body)
             process.nextTick(function() {
                 User.findOne({ 'local.username':  username }, function(err, user) {
-                    //console.log('**** findOne email   ',email)
-                    //console.log('**** findOne  user ',user)
-                    //console.log('**** findOne  err ',err)
                     if (err){
                         console.log('**** Sign Up err  ',err)
                         return done(err);
@@ -51,13 +49,15 @@ module.exports = function(passport) {
                         console.log('--------------- Sign Up user ------------------ ')
                         return done(null, false, req.flash('signupMessage', 'Tên này đã được sử dụng'));
                     } else {
-                        var newUser = new User();
+                        let newUser = new User();
 
                         newUser.local.username = username
                         newUser.local.fullName = req.body.fullName
                         newUser.local.phoneNumber = req.body.phoneNumber
+                        newUser.local.point = POINT_FOR_NEW_USER
+
                         newUser.local.password = newUser.generateHash(password);
-                        console.log('**** Sign Up newUser  ',newUser)
+                        console.log('**** Sign Up newUser  ',newUser,' point ==>  ',req.body.point)
                         newUser.save(function(err) {
                             if (err)
                                 throw err;

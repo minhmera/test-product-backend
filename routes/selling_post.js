@@ -3,6 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 const sellingPosts = require('../models/selling_post');
+const Users = require('../models/user');
+
+const POINT_PER_POST = 2
+const POINT_PER_EDIT = 1
 
 /* GET /todos listing. */
 router.get('/getAll', (req, res, next) => {
@@ -14,7 +18,7 @@ router.get('/getAll', (req, res, next) => {
         .find()
         .skip(skip)
         .limit(size)
-        //.sort({order: 1})
+        .sort({createDate: -1})
         .exec((err, products) => {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
@@ -58,7 +62,7 @@ router.get('/searchSellingPost', function (req, res, next) {
 
     //var filterOpt = {$regex: req.query.productName, $options: 'i'};
 
-    var filterOpt = { productName: { $regex: req.query.productName, $options: 'i' }}
+    var filterOpt = {productName: {$regex: req.query.productName, $options: 'i'}}
     console.log('filterOpt   ===>   ', filterOpt)
     //productName
     sellingPosts
@@ -84,8 +88,8 @@ router.get('/getByUser', function (req, res, next) {
 
     //var filterOpt = {$regex: req.query.productName, $options: 'i'};
 
-    var filterOpt = { userId: { $regex: req.query.userId, $options: 'i' }}
-    console.log('filterOpt   ===>   ', filterOpt, 'req ==> ',req.query)
+    var filterOpt = {userId: {$regex: req.query.userId, $options: 'i'}}
+    console.log('filterOpt   ===>   ', filterOpt, 'req ==> ', req.query)
     //productName
     sellingPosts
         .find(filterOpt)
@@ -102,9 +106,6 @@ router.get('/getByUser', function (req, res, next) {
 });
 
 
-
-
-
 //* Delete all data from Categoty schema
 router.get('/deleteAll', (req, res, next) => {
     console.log('*********  deleteAll  category');
@@ -118,14 +119,41 @@ router.get('/deleteAll', (req, res, next) => {
 });
 
 
-/* POST /Categories */
 router.post('/createOne', (req, res, next) => {
     console.log('**** POST  Categories   ', req.body);
-    sellingPosts.create(req.body, (err, post) => {
+
+
+    Users.findById(req.body.userId, (err, user) => {
         if (err) return next(err);
-        console.log('****   post Categories  ', post);
-        res.json(post);
-    });
+        if (user.local.point > POINT_PER_POST) {
+            sellingPosts.create(req.body, (err, post) => {
+                if (err) return next(err);
+                console.log('****   post Categories  ', post);
+
+                let updatedInfo = user
+                updatedInfo.local.point = updatedInfo.local.point - POINT_PER_POST
+                Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                    if (err) {
+                        console.log('***   Error ', err);
+                        return next(err);
+                    }
+                });
+
+                res.json(post);
+            });
+        } else {
+            let errorJson = {
+                outOfPoint:true,
+                errorMessage: "OutOfPoint"
+            }
+
+            res.json(errorJson);
+        }
+
+        //res.json({user:user});
+    })
+
+
 });
 
 /* GET /todos/id */
@@ -141,19 +169,45 @@ router.put('/:id', (req, res, next) => {
     console.log('***   req.body   ', req.body);
     sellingPosts.findById(req.params.id, (err, post) => {
         if (err) return next(err);
-        console.log('Find a product first ==>   ',post.userId)
+        console.log('Find a product first ==>   ', post.userId)
         //res.json(post);
-        if (post.userId === req.body.userId ) {
-            sellingPosts.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
-                if (err) {
-                    console.log('***   Error ', err);
-                    return next(err);
+        if (post.userId === req.body.userId) {
+
+            Users.findById(req.body.userId, (err, user) => {
+                if (err) return next(err);
+                if (user.local.point > POINT_PER_EDIT) {
+                    let updatedInfo = user
+                    updatedInfo.local.point = updatedInfo.local.point - POINT_PER_EDIT
+                    Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                        if (err) {
+                            console.log('***   Error ', err);
+                            return next(err);
+                        }
+                    });
+
+                    sellingPosts.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+                        if (err) {
+                            console.log('***   Error ', err);
+                            return next(err);
+                        }
+                        res.json(post);
+
+                    });
+                } else {
+                    let errorJson = {
+                        outOfPoint:true,
+                        errorMessage: "OutOfPoint"
+                    }
+
+                    res.json(errorJson);
                 }
-                res.json(post);
-            });
+
+            })
+
+
         } else {
             let errorJson = {
-                "errorMessage":"Không có quyền edidt"
+                "errorMessage": "Không có quyền edidt"
             }
             res.status(401).json(errorJson);
         }
