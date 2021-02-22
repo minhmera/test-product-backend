@@ -44,7 +44,7 @@ router.get('/getByCategory', function (req, res, next) {
         .find(filterOpt)
         .skip(skip)
         .limit(size)
-        //.sort({order: 1})
+        .sort({createDate: -1})
         .exec((err, products) => {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
@@ -69,7 +69,7 @@ router.get('/searchSellingPost', function (req, res, next) {
         .find(filterOpt)
         .skip(skip)
         .limit(size)
-        //.sort({order: 1})
+        .sort({createDate: -1})
         .exec((err, products) => {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
@@ -80,7 +80,7 @@ router.get('/searchSellingPost', function (req, res, next) {
 });
 
 
-router.get('/getByUser', function (req, res, next) {
+router.post('/getByUser', function (req, res, next) {
 
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
@@ -88,14 +88,15 @@ router.get('/getByUser', function (req, res, next) {
 
     //var filterOpt = {$regex: req.query.productName, $options: 'i'};
 
-    var filterOpt = {userId: {$regex: req.query.userId, $options: 'i'}}
-    console.log('filterOpt   ===>   ', filterOpt, 'req ==> ', req.query)
+
+    var filterOpt = {userId: {$regex: req.body.userId, $options: 'i'}}
+    console.log('getByUser req ==> ', req.body)
     //productName
     sellingPosts
         .find(filterOpt)
         .skip(skip)
         .limit(size)
-        //.sort({order: 1})
+        .sort({createDate: -1})
         .exec((err, products) => {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
