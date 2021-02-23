@@ -50,7 +50,7 @@ module.exports = function(passport) {
                         return done(null, false, req.flash('signupMessage', 'Tên này đã được sử dụng'));
                     } else {
                         let newUser = new User();
-
+ ``
                         newUser.local.username = username
                         newUser.local.fullName = req.body.fullName
                         newUser.local.phoneNumber = req.body.phoneNumber
