@@ -55,8 +55,8 @@ module.exports = function(passport) {
                         newUser.local.fullName = req.body.fullName
                         newUser.local.phoneNumber = req.body.phoneNumber
                         newUser.local.point = POINT_FOR_NEW_USER
-
                         newUser.local.password = newUser.generateHash(password);
+
                         console.log('**** Sign Up newUser  ',newUser,' point ==>  ',req.body.point)
                         newUser.save(function(err) {
                             if (err)

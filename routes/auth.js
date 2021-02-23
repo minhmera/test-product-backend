@@ -155,9 +155,7 @@ router.post('/changePassword', (req, res, next) => {
         if (err) return next(err);
 
         if (req.body.password === user.local.password) {
-
             let updatedInfo = user
-
             console.log('updatedInfo ==>  ', updatedInfo)
             if (req.body.newPassword !== "") {
                 updatedInfo.local.password = genHashPass(req.body.newPassword)//req.body.newPassword
@@ -165,11 +163,14 @@ router.post('/changePassword', (req, res, next) => {
 
 
             Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+
                 if (err) {
                     console.log('***   Error ', err);
                     return next(err);
                 }
-                res.json(newUser);
+                let newUpdatedUser =  newUser
+                newUpdatedUser.local.password = updatedInfo.local.password
+                res.json(newUpdatedUser);
             });
 
             //res.json(user);
