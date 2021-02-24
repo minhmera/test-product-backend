@@ -217,13 +217,43 @@ router.put('/:id', (req, res, next) => {
 
 
 });
-
-/* DELETE /todos/:id */
+//==========
 router.delete('/:id', (req, res, next) => {
-    sellingPosts.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+    console.log('***   req.params  ', req.params);
+    console.log('***   req.body   ', req.body);
+    sellingPosts.findById(req.params.id, (err, post) => {
         if (err) return next(err);
-        res.json(post);
+        console.log('Find a product first ==>   ', post.productName)
+        //res.json(post);
+        if (post) {
+            if (post.userId === req.body.userId) {
+                console.log('-----------------  DELETE SELLING PRODUCT ----------')
+                sellingPosts.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+                    if (err) {
+                        console.log('***   Error ', err);
+                        return next(err);
+                    }
+                    res.json(post);
+
+                });
+
+
+            } else {
+                let errorJson = {
+                    "errorMessage": "Không có quyền edit"
+                }
+                res.status(401).json(errorJson);
+            }
+        } else {
+            let errorJson = {
+                "errorMessage": "Sản phẩm không tồn tại"
+            }
+            res.status(401).json(errorJson);
+        }
+
+
     });
+
 });
 
 module.exports = router;

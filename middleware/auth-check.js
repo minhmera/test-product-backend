@@ -8,6 +8,7 @@ const config = require('../config/config');
  */
 
 module.exports = (req, res, next) => {
+    //console.log('****  middleware  request headers ', req.headers, "   Method  ",req.method)
     console.log('****  middleware  authorization  ', req.headers.authorization, "   Method  ",req.method)
 
     if(req.method == "GET"){
