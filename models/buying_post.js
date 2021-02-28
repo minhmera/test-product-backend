@@ -6,6 +6,8 @@ const BuyingPost = new mongoose.Schema({
   fullName: String,
   categoryId: Number,
   productName: String,
+  productPrice: Number,
+  measuring: String,
   provinceId: Number,
   districtId: Number,
   provinceName: String,

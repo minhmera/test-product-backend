@@ -157,7 +157,6 @@ router.post('/createOne', (req, res, next) => {
 
 });
 
-/* GET /todos/id */
 router.get('/:id', (req, res, next) => {
     sellingPosts.findById(req.params.id, (err, post) => {
         if (err) return next(err);
