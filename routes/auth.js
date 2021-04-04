@@ -9,8 +9,11 @@ var config = require('../config/config')
 router.get('/', function (req, res, next) {
     res.render('auth.ejs', {title: 'Express'});
 });
+router.get('/', function (req, res, next) {
+    res.render('auth.ejs', {title: 'Express'});
+});
 
-router.get('/login', function (req, res, next) {
+router.get('/auth/loginSuccess', function (req, res, next) {
     res.render('login.ejs', {message: req.flash('loginMessage')});
 });
 
@@ -20,12 +23,12 @@ router.get('/loginFailed', function (req, res, next) {
 });
 
 router.get('/loginSuccess', function (req, res, next) {
+    //console.log('***   LoginSuccess callBack   headers ', req.headers)
     const payload = {
         sub: req.user._id
     };
     const token = jwt.sign(payload, config.jwtSecret);
-    console.log('******* token   ', token)
-    console.log('***   loginSuccess   user ', req.user)
+    console.log('***   LoginSuccess callBack   user ', req.user)
 
     var resultObj = {
         userInfo: req.user,
@@ -33,6 +36,28 @@ router.get('/loginSuccess', function (req, res, next) {
     }
     res.json({result: resultObj})
 });
+
+router.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/auth/loginSuccess',
+    //successRedirect: 'http://192.168.1.11:3000/auth/loginSucces',
+    failureRedirect: '/auth/loginFailed',
+    failureFlash: true,
+}));
+
+router.post('/loginWeb', function(req, res, next) {
+    console.log(' ---------------   login2  -------------------   ')
+    passport.authenticate('local-login', function(err, user) {
+        console.log(' ---------------   login2  RES -------------------   ')
+           if (!user) {
+               res.json({errorMessage:'đéo có user nha !!!  '})
+           } else {
+               res.json(user)
+           }
+
+        })(req, res);
+})
+
+
 
 router.get('/signupSuccess', function (req, res, next) {
     const payload = {
@@ -79,11 +104,6 @@ router.post('/signup', passport.authenticate('local-signup', {
     failureFlash: true,
 }));
 
-router.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/auth/loginSuccess',
-    failureRedirect: '/auth/loginFailed',
-    failureFlash: true,
-}));
 
 
 // ************    Test
@@ -231,6 +251,8 @@ router.get('/updatePassByName/:username', function (req, res, next) {
 
 });
 
+
+
 function genRandomPass(length) {
     let result = '';
     let characters = 'ABCDEFGH0123456789';
@@ -245,10 +267,16 @@ function genHashPass(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 }
 
-module.exports = router;
-
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
     res.redirect('/');
 }
+
+
+module.exports = router;
+
+
+
+
+

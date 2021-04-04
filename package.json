@@ -22,7 +22,7 @@
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
-    "cors": "^2.8.4",
+    "cors": "^2.8.5",
     "debug": "^3.0.1",
     "dotenv": "^6.1.0",
     "ejs": "^2.5.7",
