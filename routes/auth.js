@@ -51,7 +51,19 @@ router.post('/loginWeb', function(req, res, next) {
            if (!user) {
                res.json({errorMessage:'đéo có user nha !!!  '})
            } else {
-               res.json(user)
+               console.log(' loginWeb ===>   ',user)
+               //res.json(user)
+               const payload = {
+                   sub: user._id
+               };
+               const token = jwt.sign(payload, config.jwtSecret);
+               console.log('***   LoginSuccess callBack   user ', req.user)
+
+               let resultObj = {
+                   userInfo: user,
+                   token: token
+               }
+               res.json({result: resultObj})
            }
 
         })(req, res);
