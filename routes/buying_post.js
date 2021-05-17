@@ -123,7 +123,8 @@ router.post('/createOne', (req, res, next) => {
 
 
     Users.findById(req.body.userId, (err, user) => {
-        if (err) return next(err);
+        //if (err) return next(err);
+        console.log(' Create Selling Post user  =>   ',user)
         if (user.local.point > POINT_PER_POST) {
             buyingPost.create(req.body, (err, post) => {
                 if (err) return next(err);

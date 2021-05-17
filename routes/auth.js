@@ -6,6 +6,13 @@ var jwt = require('jsonwebtoken');
 var Users = require('../models/user');
 var config = require('../config/config')
 
+
+const POINT_FOR_NEW_USER = 1000
+
+
+
+
+
 router.get('/', function (req, res, next) {
     res.render('auth.ejs', {title: 'Express'});
 });
@@ -39,7 +46,6 @@ router.get('/loginSuccess', function (req, res, next) {
 
 router.post('/login', passport.authenticate('local-login', {
     successRedirect: '/auth/loginSuccess',
-    //successRedirect: 'http://192.168.1.11:3000/auth/loginSucces',
     failureRedirect: '/auth/loginFailed',
     failureFlash: true,
 }));
@@ -49,7 +55,7 @@ router.post('/loginWeb', function(req, res, next) {
     passport.authenticate('local-login', function(err, user) {
         console.log(' ---------------   login2  RES -------------------   ')
            if (!user) {
-               res.json({errorMessage:'đéo có user nha !!!  '})
+               res.json({errorMessage:'Tên đặng nhập hoặc mật khẩu không đúng'})
            } else {
                console.log(' loginWeb ===>   ',user)
                //res.json(user)
@@ -69,6 +75,54 @@ router.post('/loginWeb', function(req, res, next) {
         })(req, res);
 })
 
+router.post('/signupWeb', function(req, res, next) {
+    console.log(' ---------------   signupWeb  -------------------   ')
+    //passport.authenticate('local-signup', function(err, user) {
+        console.log('**** signupWeb ==> body ',req.body)
+
+        Users.findOne({'local.username': req.body.username}, function (err, user) {
+            console.log(' ---------------   signupWeb  333333333   err ',err, 'user ==> ',user)
+            // let testJson = {test:' test choi'}
+            // res.json({result: testJson})
+
+
+
+            if (user) {
+                res.json({errorMessage: "Tên này đã được sử dụng"});
+            } else {
+
+                if(req.body.username.length < 4){
+                    //return done(null, false, req.flash('signupMessage', 'Username must be longer than 4 characters'));
+                    res.json({errorMessage: "Tên đăng nhập phải dài hơn 4 ký tự"});
+                } else if(req.body.password.length < 8){
+                    res.json({errorMessage: "Mật khẩu phải dài hơn 8 ký tự"});
+                } else {
+                    let newUser = new Users();
+                    newUser.local.username = req.body.username
+                    newUser.local.fullName = req.body.fullName
+                    newUser.local.phoneNumber = req.body.phoneNumber
+                    newUser.local.point = POINT_FOR_NEW_USER
+                    newUser.local.password = genHashPass(req.body.password);
+
+                    console.log('**** Sign Up newUser  ',newUser)
+                    newUser.save(function(err) {
+                        // if (err)
+                        //     throw err;
+                        res.json({result: newUser})
+                    });
+                }
+
+
+            }
+        });
+
+
+
+        // let testJson = {test:' test choi'}
+        // res.json({result: testJson})
+    //})(req, res);
+    //});
+})
 
 
 router.get('/signupSuccess', function (req, res, next) {

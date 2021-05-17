@@ -121,35 +121,40 @@ router.get('/deleteAll', (req, res, next) => {
 
 
 router.post('/createOne', (req, res, next) => {
-    console.log('**** POST  Categories   ', req.body);
 
+
+    const obj = req.body
+    console.log('**** POST  Categories   ', req.body, '  --  userId ==> ',req.body.fullName);
 
     Users.findById(req.body.userId, (err, user) => {
-        if (err) return next(err);
-        if (user.local.point > POINT_PER_POST) {
-            sellingPosts.create(req.body, (err, post) => {
-                if (err) return next(err);
-                console.log('****   post Categories  ', post);
-
-                let updatedInfo = user
-                updatedInfo.local.point = updatedInfo.local.point - POINT_PER_POST
-                Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
-                    if (err) {
-                        console.log('***   Error ', err);
-                        return next(err);
-                    }
-                });
-
-                res.json(post);
-            });
-        } else {
+        console.log(' Create Selling user ==> ',user)
+        if (user === null) {
             let errorJson = {
                 outOfPoint:true,
                 errorMessage: "OutOfPoint"
             }
 
             res.json(errorJson);
+        } else {
+            if (user.local.point > POINT_PER_POST) {
+                sellingPosts.create(req.body, (err, post) => {
+                    if (err) return next(err);
+                    console.log('****   post Categories  ', post);
+
+                    let updatedInfo = user
+                    updatedInfo.local.point = updatedInfo.local.point - POINT_PER_POST
+                    Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                        if (err) {
+                            console.log('***   Error ', err);
+                            return next(err);
+                        }
+                    });
+
+                    res.json(post);
+                });
+            }
         }
+
 
         //res.json({user:user});
     })

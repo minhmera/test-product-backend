@@ -18,21 +18,22 @@ router.post('/', function(req, res) {
     //     return res.json({'imageUrl': req.file.location});
     // });
 
-    console.log('Image Upload ==>  ',req.body)
+    console.log('Image Upload ==>  ',req)
 
     multipleUpload(req, res, function(err, some) {
-        //console.log("multipleUpload   ==>  req",req.files)
+        console.log("multipleUpload   ==>  req",req.files)
         let imagesReq = []
         if (err) {
             return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
         }
-        console.log(" res  :==>  ",res)
+
         if(req.files){
             req.files.map((item,index)=>{
                 //console.log(" item ==>  ", item)
                 imagesReq.push(item.location)
             })
         }
+        //console.log(" res  :==>  ",imagesReq)
         return res.json({'imageUrls': imagesReq});
     });
 })
