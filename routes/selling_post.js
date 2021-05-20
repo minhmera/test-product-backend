@@ -14,6 +14,7 @@ router.get('/getAll', (req, res, next) => {
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
+    var filterOpt = { "isApprove": true }
     sellingPosts
         .find()
         .skip(skip)

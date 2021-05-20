@@ -17,6 +17,7 @@ const SellingPost = new mongoose.Schema({
   productCertification: String,
   sellerPhone: String,
   createDate: { type: Date, default: Date.now },
+  isApprove:Boolean
 
 });
 

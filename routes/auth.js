@@ -307,7 +307,7 @@ router.get('/updatePassByName/:username', function (req, res, next) {
                 res.json(newUser);
             });
         } else {
-            res.json(null)
+            res.json({errorMessage:'Tên đăng nhập không tồn tại '})
         }
 
 
