@@ -40,6 +40,8 @@ const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const config = require('../config/config');
+const moment = require('moment');
+
 
 const s3Config = new AWS.S3({
     accessKeyId: config.AWS_ACCESS_KEY_ID,
@@ -75,8 +77,17 @@ const multerS3Config = multerS3({
     key: function (req, file, callback) {
         console.log('Upload image req ==>  ',req )
         console.log('Upload image file ==>  ',file )
-        var newFileName = Date.now() + "-" + file.originalname;
-        var fullPath = 'user_upload/images/'+ newFileName;
+
+        let dateString = Date.now()
+        let formatString = 'DD/MM/YYYYTHH:mm'
+        let timeString = ""
+        let time = moment(dateString).format(formatString)
+        timeString = time.replace(':','H')
+
+
+        //var newFileName = Date.now() + "-" + file.originalname;
+        let newFileName = Date.now() + "_" + timeString
+        let fullPath = 'user_upload/images/'+ newFileName;
         console.log(" fullPath  ==>  ", fullPath)
         callback(null, fullPath);
         //callback(null, Date.now().toString() + '-' + file.originalname)

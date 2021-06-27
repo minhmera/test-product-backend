@@ -1,11 +1,13 @@
 const express = require('express');
 
 const router = express.Router();
-
+const moment = require('moment');
 const Users = require('../models/user');
 const buyingPost = require('../models/buying_post');
 const POINT_PER_POST = 2
 const POINT_PER_EDIT = 1
+
+
 
 /* GET /todos listing. */
 router.get('/getAll', (req, res, next) => {
@@ -38,7 +40,6 @@ router.get('/getByCategory', function (req, res, next) {
     if (req.query.provinceId) {
         filterOpt.provinceId = req.query.provinceId
     }
-
 
     buyingPost
         .find(filterOpt)

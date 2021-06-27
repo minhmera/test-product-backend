@@ -31,40 +31,54 @@ module.exports = function(passport) {
         },
         function(req, username, password, done) {
             console.log('**** Sign up ==>  user ',req.body)
+            //'local.fullName':  req.body.fullName
             process.nextTick(function() {
-                User.findOne({ 'local.username':  username }, function(err, user) {
+                User.findOne({ 'local.fullName':  req.body.fullName}, function(err, user) {
                     if (err){
                         console.log('**** Sign Up err  ',err)
                         return done(err);
                     }
-                    if(username.length < 4){
-                        return done(null, false, req.flash('signupMessage', 'Username must be longer than 4 characters'));
-                    }
-
-                    if(password.length < 8){
-                        return done(null, false, req.flash('signupMessage', 'Password must be longer than 8 characters'));
-                    }
 
                     if (user) {
                         console.log('--------------- Sign Up user ------------------ ')
-                        return done(null, false, req.flash('signupMessage', 'Tên này đã được sử dụng'));
+                        return done(null, false, req.flash('signupMessage', 'Tên thương hiệu này đã được sử dụng'));
                     } else {
-                        let newUser = new User();
- ``
-                        newUser.local.username = username
-                        newUser.local.fullName = req.body.fullName
-                        newUser.local.phoneNumber = req.body.phoneNumber
-                        newUser.local.point = POINT_FOR_NEW_USER
-                        newUser.local.password = newUser.generateHash(password);
+                        User.findOne({ 'local.username':  username}, function(err, user) {
+                            if (err){
+                                console.log('**** Sign Up err  ',err)
+                                return done(err);
+                            }
+                            if(username.length < 4){
+                                return done(null, false, req.flash('signupMessage', 'Username must be longer than 4 characters'));
+                            }
 
-                        console.log('**** Sign Up newUser  ',newUser,' point ==>  ',req.body.point)
-                        newUser.save(function(err) {
-                            if (err)
-                                throw err;
-                            return done(null, newUser);
+                            if(password.length < 8){
+                                return done(null, false, req.flash('signupMessage', 'Password must be longer than 8 characters'));
+                            }
+
+                            if (user) {
+                                console.log('--------------- Sign Up user ------------------ ')
+                                return done(null, false, req.flash('signupMessage', 'Tên này đã được sử dụng'));
+                            } else {
+                                let newUser = new User();
+                                ``
+                                newUser.local.username = username
+                                newUser.local.fullName = req.body.fullName
+                                newUser.local.phoneNumber = req.body.phoneNumber
+                                newUser.local.point = POINT_FOR_NEW_USER
+                                newUser.local.password = newUser.generateHash(password);
+
+                                console.log('**** Sign Up newUser  ',newUser,' point ==>  ',req.body.point)
+                                newUser.save(function(err) {
+                                    if (err)
+                                        throw err;
+                                    return done(null, newUser);
+                                });
+                            }
                         });
                     }
-                });
+                })
+
             });
         }));
 
