@@ -18,7 +18,7 @@ router.post('/', function(req, res) {
     //     return res.json({'imageUrl': req.file.location});
     // });
 
-    console.log('Image Upload ==>  ',req)
+    //console.log('Image Upload ==>  ',req)
 
     multipleUpload(req, res, function(err, some) {
         console.log("multipleUpload   ==>  req",req.files)

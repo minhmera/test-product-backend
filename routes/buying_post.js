@@ -22,7 +22,7 @@ router.get('/getAll', (req, res, next) => {
             buyingPost.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({result: products,totalCount: count});
             });
         });
 
@@ -39,16 +39,17 @@ router.get('/getByCategory', function (req, res, next) {
         filterOpt.provinceId = req.query.provinceId
     }
 
+
     buyingPost
         .find(filterOpt)
         .skip(skip)
         .limit(size)
         //.sort({order: 1})
         .exec((err, products) => {
-            buyingPost.countDocuments((err, count) => {
+            buyingPost.countDocuments(filterOpt,(err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({result: products,totalCount: count});
             });
         })
 });
@@ -73,7 +74,7 @@ router.get('/searchBuyingPost', function (req, res, next) {
             buyingPost.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({result: products,totalCount: count});
             });
         })
 });
@@ -99,7 +100,7 @@ router.post('/getByUser', function (req, res, next) {
             buyingPost.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({result: products,totalCount: count});
             });
         })
 });

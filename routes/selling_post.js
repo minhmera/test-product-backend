@@ -24,7 +24,7 @@ router.get('/getAll', (req, res, next) => {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({result: products,totalCount: count});
             });
         });
 
@@ -41,16 +41,21 @@ router.get('/getByCategory', function (req, res, next) {
         filterOpt.provinceId = req.query.provinceId
     }
 
+
+
     sellingPosts
         .find(filterOpt)
         .skip(skip)
         .limit(size)
         .sort({createDate: -1})
         .exec((err, products) => {
-            sellingPosts.countDocuments((err, count) => {
+            sellingPosts.countDocuments(filterOpt,(err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({
+                    result: products,
+                    totalCount: count
+                });
             });
         })
 });
@@ -61,7 +66,8 @@ router.get('/searchSellingPost', function (req, res, next) {
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
-    //var filterOpt = {$regex: req.query.productName, $options: 'i'};
+    //db.products.find( { sku: { $regex: /789$/ } } )
+    //var filterOpt = {productName: {$regex: req.query.productName, $options: 'i'}}
 
     var filterOpt = {productName: {$regex: req.query.productName, $options: 'i'}}
     console.log('filterOpt   ===>   ', filterOpt)
@@ -75,7 +81,8 @@ router.get('/searchSellingPost', function (req, res, next) {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({result: products
+                    ,totalCount: count});
             });
         })
 });
@@ -102,7 +109,7 @@ router.post('/getByUser', function (req, res, next) {
             sellingPosts.countDocuments((err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
-                res.json({result: products});
+                res.json({result: products,totalCount: count});
             });
         })
 });
