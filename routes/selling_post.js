@@ -16,6 +16,27 @@ router.get('/getAll', (req, res, next) => {
 
     var filterOpt = { "isApprove": true }
     sellingPosts
+        .find(filterOpt)
+        .skip(skip)
+        .limit(size)
+        .sort({createDate: -1})
+        .select("-userId")
+        .exec((err, products) => {
+            sellingPosts.countDocuments((err, count) => {
+                console.log('All Page ==>  count ', count)
+                if (err) return next(err);
+                res.json({result: products,totalCount: count});
+            });
+        });
+
+});
+
+router.get('/getAllADMIN', (req, res, next) => {
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
+    var skip = page > 0 ? ((page - 1) * size) : 0;
+
+    sellingPosts
         .find()
         .skip(skip)
         .limit(size)
@@ -30,13 +51,17 @@ router.get('/getAll', (req, res, next) => {
 
 });
 
+
 router.get('/getByCategory', function (req, res, next) {
     console.log('query   ===>   ', req.query)
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
-    var filterOpt = {"categoryId": req.query.categoryId}
+    var filterOpt = {
+        "categoryId": req.query.categoryId,
+        "isApprove": true
+    }
     if (req.query.provinceId) {
         filterOpt.provinceId = req.query.provinceId
     }
@@ -48,6 +73,7 @@ router.get('/getByCategory', function (req, res, next) {
         .skip(skip)
         .limit(size)
         .sort({createDate: -1})
+        .select("-userId")
         .exec((err, products) => {
             sellingPosts.countDocuments(filterOpt,(err, count) => {
                 console.log('All Page ==>  count ', count)
@@ -88,6 +114,22 @@ router.get('/searchSellingPost', function (req, res, next) {
 });
 
 
+
+
+
+//* Delete all data from Categoty schema
+router.get('/deleteAll', (req, res, next) => {
+    console.log('*********  deleteAll  category');
+    sellingPosts.remove((err, removed) => {
+        if (err) return next(err);
+        let json = {
+            'status': 'remove all is successfully',
+        }
+        res.json(json)
+    });
+});
+
+
 router.post('/getByUser', function (req, res, next) {
 
     var page = parseInt(req.query.page);
@@ -115,17 +157,6 @@ router.post('/getByUser', function (req, res, next) {
 });
 
 
-//* Delete all data from Categoty schema
-router.get('/deleteAll', (req, res, next) => {
-    console.log('*********  deleteAll  category');
-    sellingPosts.remove((err, removed) => {
-        if (err) return next(err);
-        let json = {
-            'status': 'remove all is successfully',
-        }
-        res.json(json)
-    });
-});
 
 
 router.post('/createOne', (req, res, next) => {
@@ -176,6 +207,9 @@ router.get('/:id', (req, res, next) => {
         res.json(post);
     });
 });
+
+
+
 
 router.put('/:id', (req, res, next) => {
     console.log('***   req.params.id  ', req.params.id);
@@ -229,7 +263,6 @@ router.put('/:id', (req, res, next) => {
 
 
 });
-//==========
 router.delete('/:id', (req, res, next) => {
     console.log('***   req.params  ', req.params);
     console.log('***   req.body   ', req.body);
@@ -267,5 +300,37 @@ router.delete('/:id', (req, res, next) => {
     });
 
 });
+
+
+
+
+
+
+router.put('/ADMIN/:id', (req, res, next) => {
+    console.log('***   req.params.id  ', req.params.id);
+    console.log('***   req.body   ', req.body);
+    sellingPosts.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+        if (err) {
+            console.log('***   Error ', err);
+            return next(err);
+        }
+        res.json(post);
+
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router;

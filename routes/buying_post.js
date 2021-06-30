@@ -14,6 +14,26 @@ router.get('/getAll', (req, res, next) => {
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
+    var filterOpt = { "isApprove": true }
+    buyingPost
+        .find(filterOpt)
+        .skip(skip)
+        .limit(size)
+        .sort({createDate: -1})
+        .exec((err, products) => {
+            buyingPost.countDocuments(filterOpt,(err, count) => {
+                console.log('All Page ==>  count ', count)
+                if (err) return next(err);
+                res.json({result: products,totalCount: count});
+            });
+        });
+
+});
+
+router.get('/getAllADMIN', (req, res, next) => {
+    var page = parseInt(req.query.page);
+    var size = parseInt(req.query.size);
+    var skip = page > 0 ? ((page - 1) * size) : 0;
 
     buyingPost
         .find()
@@ -36,7 +56,7 @@ router.get('/getByCategory', function (req, res, next) {
     var size = parseInt(req.query.size);
     var skip = page > 0 ? ((page - 1) * size) : 0;
 
-    var filterOpt = {"categoryId": req.query.categoryId}
+    var filterOpt = {"categoryId": req.query.categoryId,"isApprove": true}
     if (req.query.provinceId) {
         filterOpt.provinceId = req.query.provinceId
     }
@@ -256,6 +276,22 @@ router.delete('/:id', (req, res, next) => {
 
     });
 
+});
+
+
+router.put('/ADMIN/:id', (req, res, next) => {
+    console.log('***   req.params.id  ', req.params.id);
+    console.log('***   req.body   ', req.body);
+
+
+    buyingPost.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+        if (err) {
+            console.log('***   Error ', err);
+            return next(err);
+        }
+        res.json(post);
+
+    });
 });
 
 module.exports = router;
