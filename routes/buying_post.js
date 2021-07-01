@@ -4,17 +4,17 @@ const router = express.Router();
 const moment = require('moment');
 const Users = require('../models/user');
 const buyingPost = require('../models/buying_post');
-const POINT_PER_POST = 2
-const POINT_PER_EDIT = 1
+const POINT_PER_POST = 0
+const POINT_PER_EDIT = 0
 
 
 
 /* GET /todos listing. */
 router.get('/getAll', (req, res, next) => {
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
-    var skip = page > 0 ? ((page - 1) * size) : 0;
-    var filterOpt = { "isApprove": true }
+    let page = parseInt(req.query.page);
+    let size = parseInt(req.query.size);
+    let skip = page > 0 ? ((page - 1) * size) : 0;
+    let filterOpt = { "isApprove": true }
     buyingPost
         .find(filterOpt)
         .skip(skip)
@@ -31,17 +31,18 @@ router.get('/getAll', (req, res, next) => {
 });
 
 router.get('/getAllADMIN', (req, res, next) => {
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
-    var skip = page > 0 ? ((page - 1) * size) : 0;
+    let page = parseInt(req.query.page);
+    let size = parseInt(req.query.size);
+    let skip = page > 0 ? ((page - 1) * size) : 0;
+    let filterOpt = { "isApprove": req.query.status }
 
     buyingPost
-        .find()
+        .find(filterOpt)
         .skip(skip)
         .limit(size)
         .sort({createDate: -1})
         .exec((err, products) => {
-            buyingPost.countDocuments((err, count) => {
+            buyingPost.countDocuments(filterOpt,(err, count) => {
                 console.log('All Page ==>  count ', count)
                 if (err) return next(err);
                 res.json({result: products,totalCount: count});
@@ -52,11 +53,11 @@ router.get('/getAllADMIN', (req, res, next) => {
 
 router.get('/getByCategory', function (req, res, next) {
     console.log('query   ===>   ', req.query)
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
-    var skip = page > 0 ? ((page - 1) * size) : 0;
+    let page = parseInt(req.query.page);
+    let size = parseInt(req.query.size);
+    let skip = page > 0 ? ((page - 1) * size) : 0;
 
-    var filterOpt = {"categoryId": req.query.categoryId,"isApprove": true}
+    let filterOpt = {"categoryId": req.query.categoryId,"isApprove": true}
     if (req.query.provinceId) {
         filterOpt.provinceId = req.query.provinceId
     }
@@ -77,13 +78,13 @@ router.get('/getByCategory', function (req, res, next) {
 
 router.get('/searchBuyingPost', function (req, res, next) {
 
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
-    var skip = page > 0 ? ((page - 1) * size) : 0;
+    let page = parseInt(req.query.page);
+    let size = parseInt(req.query.size);
+    let skip = page > 0 ? ((page - 1) * size) : 0;
 
-    //var filterOpt = {$regex: req.query.productName, $options: 'i'};
+    //let filterOpt = {$regex: req.query.productName, $options: 'i'};
 
-    var filterOpt = {productName: {$regex: req.query.productName, $options: 'i'}}
+    let filterOpt = {productName: {$regex: req.query.productName, $options: 'i'}}
     console.log('filterOpt   ===>   ', filterOpt)
     //productName
     buyingPost
@@ -103,13 +104,13 @@ router.get('/searchBuyingPost', function (req, res, next) {
 
 router.post('/getByUser', function (req, res, next) {
 
-    var page = parseInt(req.query.page);
-    var size = parseInt(req.query.size);
-    var skip = page > 0 ? ((page - 1) * size) : 0;
+    let page = parseInt(req.query.page);
+    let size = parseInt(req.query.size);
+    let skip = page > 0 ? ((page - 1) * size) : 0;
 
-    //var filterOpt = {$regex: req.query.productName, $options: 'i'};
+    //let filterOpt = {$regex: req.query.productName, $options: 'i'};
 
-    var filterOpt = {userId: {$regex: req.body.userId, $options: 'i'}}
+    let filterOpt = {userId: {$regex: req.body.userId, $options: 'i'}}
     console.log('BUYING ==>  getByUser  ', req.body)
     //productName
     buyingPost
@@ -148,7 +149,9 @@ router.post('/createOne', (req, res, next) => {
         //if (err) return next(err);
         console.log(' Create Selling Post user  =>   ',user)
         if (user.local.point > POINT_PER_POST) {
-            buyingPost.create(req.body, (err, post) => {
+            let buyingPost = req.body
+            buyingPost.isApprove = false
+            buyingPost.create(buyingPost, (err, post) => {
                 if (err) return next(err);
                 console.log('****   post Categories  ', post);
 
