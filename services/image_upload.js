@@ -79,10 +79,10 @@ const multerS3Config = multerS3({
         console.log('Upload image file ==>  ',file )
 
         let dateString = Date.now()
-        let formatString = 'DD/MM/YYYYTHH:mm'
+        let formatString = 'DD-MM-YYYY'
         let timeString = ""
         let time = moment(dateString).format(formatString)
-        timeString = time.replace(':','H')
+        timeString = time//time.replace(':','H')
 
 
         //var newFileName = Date.now() + "-" + file.originalname;
