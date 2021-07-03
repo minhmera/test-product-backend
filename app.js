@@ -8,8 +8,6 @@ var cors =  require('cors');
 
 //define routers
 var routes = require('./routes/index');
-var todos = require('./routes/todos');
-var news = require('./routes/news');
 var categories = require('./routes/categories');
 var productList = require('./routes/product_list');
 var getLocation = require('./routes/get_location');
@@ -121,8 +119,6 @@ app.use('/buyingPost', authCheckMiddleware);
 
 // config routers
 app.use('/', routes);
-app.use('/todos', todos);
-app.use('/news', news);
 app.use('/categories', categories);
 app.use('/productList', productList);
 app.use('/getLocation', getLocation);
