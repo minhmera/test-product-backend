@@ -4,7 +4,7 @@ const router = express.Router();
 
 const sellingPosts = require('../models/selling_post');
 const Users = require('../models/user');
-
+const moment = require('moment');
 const POINT_PER_POST = 0
 const POINT_PER_EDIT = 0
 
@@ -35,8 +35,8 @@ router.get('/getAllADMIN', (req, res, next) => {
     let page = parseInt(req.query.page);
     let size = parseInt(req.query.size);
     let skip = page > 0 ? ((page - 1) * size) : 0;
-    //let filterOpt = { "isApprove": req.query.status }
-    let filterOpt = {  }
+    let filterOpt = { "isApprove": req.query.status }
+    console.log('getAllADMIN  ==>   ',filterOpt)
     sellingPosts
         .find(filterOpt)
         .skip(skip)
@@ -66,7 +66,13 @@ router.get('/getByCategory', function (req, res, next) {
     if (req.query.provinceId) {
         filterOpt.provinceId = req.query.provinceId
     }
+    let dateString = Date.now()
+    let formatString = 'DD-MM-YYYY'
+    let timeString = ""
+    let time = moment(dateString).format(formatString)
+    //timeString = time.replace(':','H')
 
+    console.log( 'timeString ==>  ',time)
 
 
     sellingPosts

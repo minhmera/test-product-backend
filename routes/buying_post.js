@@ -35,7 +35,7 @@ router.get('/getAllADMIN', (req, res, next) => {
     let size = parseInt(req.query.size);
     let skip = page > 0 ? ((page - 1) * size) : 0;
     let filterOpt = { "isApprove": req.query.status }
-
+    console.log('getAllADMIN  ==>   ',filterOpt)
     buyingPost
         .find(filterOpt)
         .skip(skip)
