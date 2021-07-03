@@ -40,53 +40,66 @@ const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const config = require('../config/config');
+const moment = require('moment');
+
 
 const s3Config = new AWS.S3({
-  accessKeyId: config.AWS_ACCESS_KEY_ID,
-  secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
-  Bucket: 'dongxanh'
+    accessKeyId: config.AWS_ACCESS_KEY_ID,
+    secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+    Bucket: "dongxanh"
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true)
+    } else {
+        cb(null, false)
+    }
+}
 
 // this is just to test locally if multer is working fine.
 const storage = multer.diskStorage({
-  destination: (req, res, cb) => {
-    cb(null, 'src/api/media/profiles');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now().toString()}-${file.originalname}`);
-  }
-});
+    destination: (req, res, cb) => {
+        cb(null, 'src/api/media/profiles')
+    },
+    filename: (req, file, cb) => {
+        cb(null,Date.now().toString() + '-' + file.originalname)
+    }
+})
 
 const multerS3Config = multerS3({
-  s3: s3Config,
-  bucket: 'dongxanh',
-  contentType: multerS3.AUTO_CONTENT_TYPE,
-  metadata(req, file, cb) {
-    cb(null, { fieldName: file.fieldname });
-  },
-  key(req, file, callback) {
-    const newFileName = `${Date.now()}-${file.originalname}`;
-    const fullPath = `user_upload/images/${newFileName}`;
-    console.log(' fullPath  ==>  ', fullPath);
-    callback(null, fullPath);
-    // callback(null, Date.now().toString() + '-' + file.originalname)
-  }
+    s3: s3Config,
+    bucket: "dongxanh",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: function (req, file, cb) {
+        cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, callback) {
+        console.log('Upload image req ==>  ',req )
+        console.log('Upload image file ==>  ',file )
+
+        let dateString = Date.now()
+        let formatString = 'DD-MM-YYYY'
+        let timeString = ""
+        let time = moment(dateString).format(formatString)
+        timeString = time//time.replace(':','H')
+
+
+        //var newFileName = Date.now() + "-" + file.originalname;
+        let newFileName = Date.now() + "_" + timeString
+        let fullPath = 'user_upload/images/'+ newFileName;
+        console.log(" fullPath  ==>  ", fullPath)
+        callback(null, fullPath);
+        //callback(null, Date.now().toString() + '-' + file.originalname)
+    }
 });
 
 const upload = multer({
-  storage: multerS3Config,
-  fileFilter,
-  limits: {
-    fileSize: 1024 * 1024 * 5 // we are allowing only 5 MB files
-  }
-});
+    storage: multerS3Config,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 1024 * 1024 * 5 // we are allowing only 5 MB files
+    }
+})
 
 module.exports = upload;
