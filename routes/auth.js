@@ -5,8 +5,7 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var Users = require('../models/user');
 var config = require('../config/config')
-
-
+let Utils  = require('../utils/Utils')
 const POINT_FOR_NEW_USER = 1000
 
 
@@ -75,53 +74,55 @@ router.post('/loginWeb', function(req, res, next) {
         })(req, res);
 })
 
-router.post('/signupWeb', function(req, res, next) {
+router.post('/signupWeb', function (req, res, next) {
     console.log(' ---------------   signupWeb  -------------------   ')
-    //passport.authenticate('local-signup', function(err, user) {
-        console.log('**** signupWeb ==> body ',req.body)
+    let userName = req.body.username
+    let fullName = req.body.fullName
+    console.log('**** Sign up userName ==>   ', userName, Utils.isUserNameError(userName))
+    console.log('**** Sign up fullName ==>   ', fullName, Utils.isFullNameError(fullName))
 
-        Users.findOne({'local.username': req.body.username}, function (err, user) {
-            console.log(' ---------------   signupWeb  333333333   err ',err, 'user ==> ',user)
-            // let testJson = {test:' test choi'}
-            // res.json({result: testJson})
-
-
-
-            if (user) {
-                res.json({errorMessage: "Tên này đã được sử dụng"});
-            } else {
-
-                if(req.body.username.length < 4){
-                    //return done(null, false, req.flash('signupMessage', 'Username must be longer than 4 characters'));
-                    res.json({errorMessage: "Tên đăng nhập phải dài hơn 4 ký tự"});
-                } else if(req.body.password.length < 8){
-                    res.json({errorMessage: "Mật khẩu phải dài hơn 8 ký tự"});
-                } else {
-                    let newUser = new Users();
-                    newUser.local.username = req.body.username
-                    newUser.local.fullName = req.body.fullName
-                    newUser.local.phoneNumber = req.body.phoneNumber
-                    newUser.local.point = POINT_FOR_NEW_USER
-                    newUser.local.password = genHashPass(req.body.password);
-
-                    console.log('**** Sign Up newUser  ',newUser)
-                    newUser.save(function(err) {
-                        // if (err)
-                        //     throw err;
-                        res.json({result: newUser})
-                    });
-                }
-
-
+    if (Utils.isUserNameError(userName) === true || Utils.isFullNameError(fullName) === true) {
+        res.json({errorMessage: "Lỗi định dạng"});
+    } else {
+        Users.findOne({'local.fullName': req.body.fullName}, function (err, user) {
+            if (err) {
+                console.log('**** Sign Up err  ', err)
+                res.json({errorMessage: "Lỗi"});
             }
-        });
+            if (user) {
+                res.json({errorMessage: "Tên bán hàng này đã được sử dụng"});
+            } else {
+                Users.findOne({'local.username': req.body.username}, function (err, user) {
+                    if (user) {
+                        res.json({errorMessage: "Tên này đã được sử dụng"});
+                    } else {
+
+                        if (req.body.username.length < 4) {
+                            //return done(null, false, req.flash('signupMessage', 'Username must be longer than 4 characters'));
+                            res.json({errorMessage: "Tên đăng nhập phải dài hơn 4 ký tự"});
+                        } else if (req.body.password.length < 8) {
+                            res.json({errorMessage: "Mật khẩu phải dài hơn 8 ký tự"});
+                        } else {
+                            let newUser = new Users();
+                            newUser.local.username = req.body.username
+                            newUser.local.fullName = req.body.fullName
+                            newUser.local.phoneNumber = req.body.phoneNumber
+                            newUser.local.point = POINT_FOR_NEW_USER
+                            newUser.local.password = genHashPass(req.body.password);
+
+                            //console.log('**** Sign Up newUser  ',newUser)
+                            newUser.save(function (err) {
+                                res.json({result: newUser})
+                            });
+                        }
+
+                    }
+                });
+            }
+        })
+    }
 
 
-
-        // let testJson = {test:' test choi'}
-        // res.json({result: testJson})
-    //})(req, res);
-    //});
 })
 
 
@@ -271,6 +272,56 @@ router.post('/changePassword', (req, res, next) => {
 
 
 });
+
+
+router.post('/changeShopPath', (req, res, next) => {
+
+    Users.findOne({'local.shopPath': req.body.shopPath}, function (err, user) {
+        if (err) {
+            console.log('**** Sign Up err  ', err)
+            res.json({errorMessage: "Lỗi"});
+        }
+        if (user) {
+            res.json({errorMessage: "Tên này đã được sử dụng"});
+        } else {
+            Users.findById(req.body.userId, (err, user) => {
+                if (err) return next(err);
+
+                if (req.body.password === user.local.password) {
+
+                    let updatedInfo = user
+
+                    console.log('changeShopPath    ==>  ', updatedInfo,'  body.shopPath:  ',req.body.shopPath)
+
+                    if (req.body.shopPath !== "") {
+                        updatedInfo.local.shopPath = req.body.shopPath
+                    }
+
+                    Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                        if (err) {
+                            console.log('***   Error ', err);
+                            return next(err);
+                        }
+                        res.json(newUser);
+                    });
+
+                } else {
+                    let errorJson = {
+                        "errorMessage": "Sai password"
+                    }
+                    res.status(401).json(errorJson);
+                }
+
+            });
+        }
+    })
+
+
+
+
+
+});
+
 
 /* DELETE /todos/:id */
 router.delete('/users/:id', function (req, res, next) {

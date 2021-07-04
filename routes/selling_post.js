@@ -148,7 +148,6 @@ router.post('/getByUser', function (req, res, next) {
 
     let filterOpt = {userId: {$regex: req.body.userId, $options: 'i'}}
     console.log('getByUser req ==> ', req.body)
-    //productName
     sellingPosts
         .find(filterOpt)
         .skip(skip)
@@ -161,6 +160,39 @@ router.post('/getByUser', function (req, res, next) {
                 res.json({result: products,totalCount: count});
             });
         })
+});
+
+router.get('/getByShop', function (req, res, next) {
+
+    let page = parseInt(req.query.page);
+    let size = parseInt(req.query.size);
+    let skip = page > 0 ? ((page - 1) * size) : 0;
+
+    Users.findOne({'local.shopPath': req.query.shopPath}, function (err, user) {
+        if (err) {
+            console.log('**** Sign Up err  ', err)
+            res.json({errorMessage: "Lỗi"});
+        }
+        if (user) {
+            let filterOpt = {userId: {$regex: user._id, $options: 'i'}}
+            console.log('getByShop user ==> ', user,user._id)
+            sellingPosts
+                .find(filterOpt)
+                .skip(skip)
+                .limit(size)
+                .sort({createDate: -1})
+                .exec((err, products) => {
+                    sellingPosts.countDocuments(filterOpt,(err, count) => {
+                        console.log('All Page ==>  count ', count)
+                        if (err) return next(err);
+                        res.json({result: products,totalCount: count});
+                    });
+                })
+        } else {
+            res.json({errorMessage: "Không có tên bán hàng này"});
+        }
+    })
+
 });
 
 
@@ -270,8 +302,10 @@ router.put('/:id', (req, res, next) => {
 
     });
 
-
 });
+
+
+
 router.delete('/:id', (req, res, next) => {
     console.log('***   req.params  ', req.params);
     console.log('***   req.body   ', req.body);
@@ -332,6 +366,33 @@ router.put('/ADMIN/:id', (req, res, next) => {
 
 
 
+router.delete('/ADMIN/:id', (req, res, next) => {
+    console.log('***   req.params  ', req.params);
+    console.log('***   req.body   ', req.body);
+    sellingPosts.findById(req.params.id, (err, post) => {
+        if (err) return next(err);
+        console.log('Find a product first ==>   ', post.productName)
+        //res.json(post);
+        if (post) {
+            sellingPosts.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+                if (err) {
+                    console.log('***   Error ', err);
+                    return next(err);
+                }
+                res.json(post);
+
+            });
+        } else {
+            let errorJson = {
+                "errorMessage": "Sản phẩm không tồn tại"
+            }
+            res.status(401).json(errorJson);
+        }
+
+
+    });
+
+});
 
 
 

@@ -9,6 +9,7 @@ var userSchema = mongoose.Schema({
         phoneNumber: String,
         password: String,
         point: Number,
+        shopPath: String,
     },
 });
 

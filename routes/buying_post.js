@@ -297,4 +297,34 @@ router.put('/ADMIN/:id', (req, res, next) => {
     });
 });
 
+
+router.delete('/ADMIN/:id', (req, res, next) => {
+    console.log('***   req.params  ', req.params);
+    console.log('***   req.body   ', req.body);
+    buyingPost.findById(req.params.id, (err, post) => {
+        if (err) return next(err);
+        console.log('Find a product first ==>   ', post.productName)
+        //res.json(post);
+        if (post) {
+            buyingPost.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+                if (err) {
+                    console.log('***   Error ', err);
+                    return next(err);
+                }
+                res.json(post);
+
+            });
+        } else {
+            let errorJson = {
+                "errorMessage": "Sản phẩm không tồn tại"
+            }
+            res.status(401).json(errorJson);
+        }
+
+
+    });
+
+});
+
+
 module.exports = router;
