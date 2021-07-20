@@ -188,11 +188,15 @@ router.get('/users', function (req, res, next) {
     });
 });
 
-router.get('/userDetail', (req, res, next) => {
+router.post('/getUserDetail', (req, res, next) => {
 
     Users.findById(req.body.userId, (err, user) => {
         if (err) return next(err);
-        res.json(user);
+        let cloneUser = user
+        cloneUser.local.password = null
+        console.log('getUserDetail   ==>   ',cloneUser)
+
+        res.json(cloneUser);
 
     });
 
@@ -200,7 +204,7 @@ router.get('/userDetail', (req, res, next) => {
 });
 
 /* allow to change phone number only */
-router.post('/userDetail', (req, res, next) => {
+router.post('/userDetail2', (req, res, next) => {
 
     Users.findById(req.body.userId, (err, user) => {
         if (err) return next(err);
@@ -235,6 +239,93 @@ router.post('/userDetail', (req, res, next) => {
 
 
 });
+
+
+
+// Change full name and path only
+router.post('/userDetail', (req, res, next) => {
+    Users.findById(req.body.userId, (err, user) => {
+        if (err) return next(err);
+
+        if (req.body.password === user.local.password) {
+            if(req.body.fullName !== "") {
+                Users.findOne({'local.fullName': req.body.fullName}, function (err, user) {
+                    if (err) {
+                        console.log('**** Sign Up err  ', err)
+                        res.json({errorMessage: "Lỗi"});
+                    }
+                    if (user) {
+                        res.json({errorMessage: "Tên bán hàng này đã được sử dụng 222"});
+                    }  else {
+                        Users.findOne({'local.shopPath': req.body.shopPath}, function (err, user) {
+                            if (err) {
+                                res.json({errorMessage: "Lỗi"});
+                            }
+                            if (user) {
+                                res.json({errorMessage: "Tên này đã được sử dụng"});
+                            } else {
+                                Users.findById(req.body.userId, (err, user) => {
+                                    if (err) return next(err);
+                                    let updatedInfo = user
+                                    console.log('changeShopPath 111   ==>  ', updatedInfo,'  body.shopPath:  ',req.body.shopPath)
+                                    if (req.body.shopPath !== "") {
+                                        updatedInfo.local.shopPath = req.body.shopPath
+
+                                    }
+                                    updatedInfo.local.fullName = req.body.fullName
+                                    Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                                        if (err) {
+                                            console.log('***   Error ', err);
+                                            return next(err);
+                                        }
+                                        res.json(newUser);
+                                    });
+
+                                });
+                            }
+                        })
+                    }
+                })
+            }
+            else {
+                Users.findOne({'local.shopPath': req.body.shopPath}, function (err, user) {
+                    if (err) {
+                        res.json({errorMessage: "Lỗi"});
+                    }
+                    if (user) {
+                        res.json({errorMessage: "Tên này đã được sử dụng"});
+                    } else {
+                        Users.findById(req.body.userId, (err, user) => {
+                            if (err) return next(err);
+                            let updatedInfo = user
+                            console.log('changeShopPath 222   ==>  ', updatedInfo,'  body.shopPath:  ',req.body.shopPath)
+                            if (req.body.shopPath !== "") {
+                                updatedInfo.local.shopPath = req.body.shopPath
+                            }
+                            Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                                if (err) {
+                                    console.log('***   Error ', err);
+                                    return next(err);
+                                }
+                                res.json(newUser);
+                            });
+
+                        });
+                    }
+                })
+            }
+
+        } else {
+            let errorJson = {
+                "errorMessage": "Sai password"
+            }
+            res.status(401).json(errorJson);
+        }
+
+    });
+});
+
+
 
 router.post('/changePassword', (req, res, next) => {
 
@@ -272,7 +363,6 @@ router.post('/changePassword', (req, res, next) => {
 
 
 });
-
 
 router.post('/changeShopPath', (req, res, next) => {
 
@@ -316,14 +406,8 @@ router.post('/changeShopPath', (req, res, next) => {
         }
     })
 
-
-
-
-
 });
 
-
-/* DELETE /todos/:id */
 router.delete('/users/:id', function (req, res, next) {
     Users.findByIdAndRemove(req.params.id, req.body, function (err, post) {
         if (err) return next(err);
