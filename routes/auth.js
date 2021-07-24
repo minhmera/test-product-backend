@@ -255,14 +255,20 @@ router.post('/userDetail', (req, res, next) => {
                         res.json({errorMessage: "Lỗi"});
                     }
                     if (user) {
-                        res.json({errorMessage: "Tên bán hàng này đã được sử dụng 222"});
+                        res.json({
+                            errorMessage: "Tên bán hàng này đã được sử dụng 222",
+                            fullNameError:true,
+                        });
                     }  else {
                         Users.findOne({'local.shopPath': req.body.shopPath}, function (err, user) {
                             if (err) {
                                 res.json({errorMessage: "Lỗi"});
                             }
                             if (user) {
-                                res.json({errorMessage: "Tên này đã được sử dụng"});
+                                res.json({
+                                    errorMessage: "Tên này đã được sử dụng",
+                                    shopPathError: true
+                                });
                             } else {
                                 Users.findById(req.body.userId, (err, user) => {
                                     if (err) return next(err);
@@ -293,7 +299,10 @@ router.post('/userDetail', (req, res, next) => {
                         res.json({errorMessage: "Lỗi"});
                     }
                     if (user) {
-                        res.json({errorMessage: "Tên này đã được sử dụng"});
+                        res.json({
+                            errorMessage: "Tên này đã được sử dụng",
+                            shopPathError: true
+                        });
                     } else {
                         Users.findById(req.body.userId, (err, user) => {
                             if (err) return next(err);
