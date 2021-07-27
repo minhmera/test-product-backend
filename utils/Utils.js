@@ -1,6 +1,6 @@
  function isUserNameError(str){
     if (str !== undefined) {
-        let regex = /[!@#$%^&*()_ +\-=\[\]{};':"\\|,.<>\/?]/g;
+        let regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g;
         return regex.test(str);
     } else {
         return false

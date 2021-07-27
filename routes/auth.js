@@ -256,7 +256,7 @@ router.post('/userDetail', (req, res, next) => {
                     }
                     if (user) {
                         res.json({
-                            errorMessage: "Tên bán hàng này đã được sử dụng 222",
+                            errorMessage: "Tên bán hàng này đã được sử dụng",
                             fullNameError:true,
                         });
                     }  else {
@@ -333,7 +333,6 @@ router.post('/userDetail', (req, res, next) => {
 
     });
 });
-
 
 
 router.post('/changePassword', (req, res, next) => {
@@ -462,6 +461,32 @@ router.get('/updatePassByName/:username', function (req, res, next) {
 });
 
 
+router.get('/searchUser', function (req, res, next) {
+
+    let page = parseInt(req.query.page);
+    let size = parseInt(req.query.size);
+    let skip = page > 0 ? ((page - 1) * size) : 0;
+
+
+    let filterOpt = {'local.fullName': {$regex: req.query.fullName, $options: 'i'}}
+    console.log('filterOpt   ===>   ', filterOpt)
+    //productName
+    Users
+        .find(filterOpt)
+        .skip(skip)
+        .limit(size)
+        //.select("-local.password",'-local.username','-local.point')
+        .select(['-local.password','-local.username','-local.point'])
+        .sort({createDate: -1})
+        .exec((err, products) => {
+            Users.countDocuments((err, count) => {
+                console.log('All Page ==>  count ', count)
+                if (err) return next(err);
+                res.json({result: products
+                    ,totalCount: count});
+            });
+        })
+});
 
 function genRandomPass(length) {
     let result = '';

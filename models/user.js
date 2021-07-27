@@ -10,6 +10,8 @@ var userSchema = mongoose.Schema({
         password: String,
         point: Number,
         shopPath: String,
+        createDate: { type: Date, default: Date.now },
+
     },
 });
 
