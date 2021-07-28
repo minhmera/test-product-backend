@@ -15,6 +15,7 @@ var imageUpload = require('./routes/image_upload');
 var auth = require('./routes/auth');
 
 var sellingPost = require('./routes/selling_post');
+var searchSellingPost = require('./routes/search_selling_post');
 var buyingPost = require('./routes/buying_post');
 
 
@@ -126,6 +127,7 @@ app.use('/image-upload', imageUpload);
 app.use('/auth', auth);
 
 app.use('/sellingPost', sellingPost);
+app.use('/searchSellingPost', searchSellingPost);
 app.use('/buyingPost', buyingPost);
 
 // catch 404 and forward to error handler
