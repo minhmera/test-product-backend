@@ -190,15 +190,36 @@ router.get('/users', function (req, res, next) {
 
 router.post('/getUserDetail', (req, res, next) => {
 
-    Users.findById(req.body.userId, (err, user) => {
-        if (err) return next(err);
-        let cloneUser = user
-        cloneUser.local.password = null
-        console.log('getUserDetail   ==>   ',cloneUser)
+    if (req.body.userId) {
+        Users.findById(req.body.userId, (err, user) => {
+            if (err) return next(err);
+            let cloneUser = user
+            cloneUser.local.password = null
+            console.log('getUserDetail   ==>   ',cloneUser)
 
-        res.json(cloneUser);
+            res.json(cloneUser);
 
-    });
+        });
+    } else {
+        Users.findOne({'local.fullName': req.body.fullName}, function (err, user) {
+            if (err) return next(err);
+
+            if (user) {
+                let cloneUser = user
+                cloneUser.local.password = null
+                console.log('getUserDetail   ==>   ',cloneUser)
+                res.json(cloneUser);
+            } else {
+                res.json('không có kết quả');
+            }
+
+        })
+    }
+
+
+
+
+
 
 
 });
