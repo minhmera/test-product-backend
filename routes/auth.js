@@ -199,19 +199,24 @@ router.post('/getUserDetail', (req, res, next) => {
 
         });
     } else {
-        Users.findOne({'local.fullName': req.body.fullName}, function (err, user) {
-            if (err) return next(err);
 
-            if (user) {
-                let cloneUser = user
-                cloneUser.local.password = null
-                console.log('getUserDetail   ==>   ',cloneUser)
-                res.json(cloneUser);
-            } else {
-                res.json('không có kết quả');
-            }
+        Users
+            .findOne({'local.fullName': req.body.fullName})
+            .select(['-local.password','-local.followingSellers','-local.username','-local.point'])//username
+            .exec((err, user) => {
+                Users.countDocuments((err, count) => {
+                    if (err) {
+                        let errorObj = {
+                            success: false,
+                            message:'Error '
+                        }
+                        res.json(errorObj);
+                    } else {
+                        res.json(user);
+                    }
 
-        })
+                });
+            });
     }
 
 
