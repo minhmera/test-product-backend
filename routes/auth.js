@@ -180,8 +180,6 @@ router.get('/users', function (req, res, next) {
 
     Users.find(function (err, news) {
         if (err) return next(err);
-        console.log('*****  Users length ', news.length)
-        //res.json(news);
         res.json({result: news})
 
 
@@ -508,6 +506,151 @@ router.get('/searchUser', function (req, res, next) {
             });
         })
 });
+
+
+
+
+router.post('/followSeller', function (req, res, next) {
+    let currentUserId = req.body.userId
+    let followingId = req.body.followingId
+    console.log('currentUserId: ',currentUserId, ' followingId:  ',followingId)
+
+    Users.findById(currentUserId, (err, user) => {
+        if (req.body.password === user.local.password) {
+            if (err) return next(err);
+            let updateUser = user
+
+            console.log('followSeller   ',updateUser.followingSellers,'  ----  ', followingId)
+            //updateUser.local.followingSellers = [followingId]
+            if (updateUser.local.followingSellers === undefined) {
+                console.log(' -------- CREATE -----------')
+                updateUser.local.followingSellers = [followingId]
+            } else {
+                console.log(' -------- PUSH -----------',updateUser.local.followingSellers.includes(followingId))
+                if (updateUser.local.followingSellers.includes(followingId) === false) {
+                    updateUser.local.followingSellers.push(followingId)
+                }
+
+            }
+
+            Users.findByIdAndUpdate(currentUserId, updateUser, (err, newUser) => {
+                if (err) {
+                    console.log('***   Error ', err);
+                    return next(err);
+                }
+                let successOjc = {
+                    success: true,
+                    message:'Follow user thành công'
+                }
+                res.json(successOjc);
+            });
+
+        } else {
+            let successOjc = {
+                success: false,
+                message:'Không có quyền'
+            }
+            res.json(successOjc);
+        }
+
+    });
+
+});
+
+router.post('/unFollowSeller', function (req, res, next) {
+    let currentUserId = req.body.userId
+    let followingId = req.body.followingId
+    console.log('currentUserId: ',currentUserId, ' followingId:  ',followingId)
+
+    Users.findById(currentUserId, (err, user) => {
+        if (req.body.password === user.local.password) {
+            if (err) return next(err);
+            let updateUser = user
+
+            console.log('followSeller   ',updateUser.followingSellers,'  ----  ', followingId)
+
+            //updateUser.local.followingSellers = [followingId]
+            if (updateUser.local.followingSellers !== undefined) {
+                const index = updateUser.local.followingSellers.indexOf(followingId);
+                if (index > -1) {
+                    updateUser.local.followingSellers.splice(index, 1);
+                }
+            }
+
+            Users.findByIdAndUpdate(currentUserId, updateUser, (err, newUser) => {
+                if (err) {
+                    console.log('***   Error ', err);
+                    return next(err);
+                }
+                let successOjc = {
+                    success: true,
+                    message:'Follow user thành công'
+                }
+                res.json(successOjc);
+            });
+
+        } else {
+            let successOjc = {
+                success: false,
+                message:'Không có quyền'
+            }
+            res.json(successOjc);
+        }
+
+    });
+
+});
+
+router.get('/getFollowingUser', function (req, res, next) {
+
+    let followingIds = req.query.followingIds
+
+    const ids = followingIds.split(",");
+    console.log('findFollowingUser  ==>   ',followingIds,'ids ==>   ', ids)
+
+    Users
+        .find({ _id: { $in: ids } })
+        .select(['-local.password','-local.followingSellers'])
+        .exec((err, user) => {
+            Users.countDocuments((err, count) => {
+                if (err) {
+                    let errorObj = {
+                        success: false,
+                        message:'Error '
+                    }
+                    res.json(errorObj);
+                } else {
+                    res.json(user);
+                }
+
+            });
+        });
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function genRandomPass(length) {
     let result = '';
