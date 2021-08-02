@@ -219,13 +219,31 @@ router.post('/getUserDetail', (req, res, next) => {
             });
     }
 
+});
+/* Get user detail by shop path*/
+router.get('/getUserDetailByShopPath', (req, res, next) => {
 
+        Users
+            .findOne({'local.shopPath': req.query.shopPath})
+            .select(['-local.password','-local.followingSellers','-local.username','-local.point'])//username
+            .exec((err, user) => {
+                Users.countDocuments((err, count) => {
+                    if (err) {
+                        let errorObj = {
+                            success: false,
+                            message:'Error '
+                        }
+                        res.json(errorObj);
+                    } else {
+                        res.json(user);
+                    }
 
-
-
+                });
+            });
 
 
 });
+
 
 /* allow to change phone number only */
 router.post('/userDetail2', (req, res, next) => {
@@ -263,6 +281,7 @@ router.post('/userDetail2', (req, res, next) => {
 
 
 });
+
 
 
 
