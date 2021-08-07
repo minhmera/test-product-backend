@@ -6,6 +6,7 @@ const CategorySchema = new mongoose.Schema({
     description_vi: String,
     description_en: String,
     photoUrl: String,
+    iconUrl: String,
     type: Number,
     order: Number,
     createDate: { type: Date, default: Date.now },
