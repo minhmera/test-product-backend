@@ -143,40 +143,50 @@ router.get('/deleteAll', (req, res, next) => {
 
 router.post('/createOne', (req, res, next) => {
     console.log('**** POST  Categories   ', req.body);
+    try {
+        Users.findById(req.body.userId, (err, user) => {
+            //if (err) return next(err);
+            console.log(' Create Selling Post user  =>   ',user)
+            if (user.local.point > POINT_PER_POST) {
+                let buyingBody = req.body
+                buyingBody.isApprove = false
+                buyingPost.create(buyingBody, (err, post) => {
+                    if (err) return next(err);
+                    console.log('****   post Categories  ', post);
 
+                    let updatedInfo = user
+                    updatedInfo.local.point = updatedInfo.local.point - POINT_PER_POST
+                    Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
+                        if (err) {
+                            console.log('***   Error ', err);
+                            return next(err);
+                        }
+                    });
 
-    Users.findById(req.body.userId, (err, user) => {
-        //if (err) return next(err);
-        console.log(' Create Selling Post user  =>   ',user)
-        if (user.local.point > POINT_PER_POST) {
-            let buyingPost = req.body
-            buyingPost.isApprove = false
-            buyingPost.create(buyingPost, (err, post) => {
-                if (err) return next(err);
-                console.log('****   post Categories  ', post);
-
-                let updatedInfo = user
-                updatedInfo.local.point = updatedInfo.local.point - POINT_PER_POST
-                Users.findByIdAndUpdate(user._id, updatedInfo, (err, newUser) => {
-                    if (err) {
-                        console.log('***   Error ', err);
-                        return next(err);
-                    }
+                    res.json(post);
                 });
+            } else {
+                let errorJson = {
+                    outOfPoint:true,
+                    errorMessage: "OutOfPoint"
+                }
 
-                res.json(post);
-            });
-        } else {
-            let errorJson = {
-                outOfPoint:true,
-                errorMessage: "OutOfPoint"
+                res.json(errorJson);
             }
 
-            res.json(errorJson);
+            //res.json({user:user});
+        })
+    }
+    catch (error) {
+        let errorJson = {
+            isSuccess: false,
+            message: 'Lỗi '
         }
+        res.json(errorJson);
+    }
 
-        //res.json({user:user});
-    })
+
+
 
 
 });
