@@ -75,8 +75,8 @@ const multerS3Config = multerS3({
         cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, callback) {
-        console.log('Upload image req ==>  ',req )
-        console.log('Upload image file ==>  ',file )
+        //console.log('Upload image req ==>  ',req )
+        //console.log('Upload image file ==>  ',file )
 
         let dateString = Date.now()
         let formatString = 'DD-MM-YYYY'
