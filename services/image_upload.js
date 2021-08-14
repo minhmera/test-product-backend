@@ -97,9 +97,9 @@ const multerS3Config = multerS3({
 const upload = multer({
     storage: multerS3Config,
     fileFilter: fileFilter,
-    limits: {
+    /*limits: {
         fileSize: 1024 * 1024 * 100 // we are allowing only 5 MB files
-    }
+    }*/
 })
 
 module.exports = upload;
