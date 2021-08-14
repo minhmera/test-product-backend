@@ -7,12 +7,14 @@ const Categories = require('../models/categories');
 /* GET /todos listing. */
 router.get('/getAll', (req, res, next) => {
     // eslint-disable-next-line array-callback-return
+
     Categories.find((err, categories) => {
         if (err) return next(err);
         console.log('***** Get categories length ', categories.length);
         res.json({ result: categories });
-    })
-      .sort({ order: 1 });
+
+    }).sort({ order: 1 });
+
 });
 
 /** Delete all data from Categoty schema
