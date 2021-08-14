@@ -8,7 +8,7 @@ const multipleUpload = upload.array("images",3)
 
 router.post('/', function(req, res) {
     console.log(' ******  Upload image  ',config.AWS_ACCESS_KEY_ID, "AWS_SECRET_ACCESS_KEY  ==> ",config.AWS_SECRET_ACCESS_KEY)
-
+    console.log("Upload image   ==>  req  ",req)
     // singleUpload(req, res, function(err, some) {
     //     console.log("singleUpload   req.file  ==>  ",req.file)
     //     if (err) {
