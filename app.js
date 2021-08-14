@@ -81,6 +81,10 @@ app.use(function (req, res, next) {
 });
 app.use(cors());
 app.options('*', cors());
+app.post('*', cors());
+
+
+
 // Config auth
 var flash = require('connect-flash');
 var session = require('express-session');

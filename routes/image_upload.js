@@ -21,7 +21,8 @@ router.post('/', function(req, res) {
     //console.log('Image Upload ==>  ',req)
 
     multipleUpload(req, res, function(err, some) {
-        console.log("multipleUpload   ==>  req",req.files)
+        //console.log("multipleUpload   ==>  req",req.files)
+        console.log("multipleUpload   ==>  req",req)
         let imagesReq = []
         if (err) {
             return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
