@@ -34,7 +34,8 @@ router.get('/getAllADMIN', (req, res, next) => {
     let page = parseInt(req.query.page);
     let size = parseInt(req.query.size);
     let skip = page > 0 ? ((page - 1) * size) : 0;
-    let filterOpt = { "isApprove": req.query.status }
+    //let filterOpt = { "isApprove": req.query.status }
+    let filterOpt = { "isApprove": false }
     console.log('getAllADMIN  ==>   ',filterOpt)
     buyingPost
         .find(filterOpt)
@@ -220,7 +221,10 @@ router.put('/:id', (req, res, next) => {
                         }
                     });
 
-                    buyingPost.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+                    let editObj = req.body
+                    editObj.isApprove = false
+
+                    buyingPost.findByIdAndUpdate(req.params.id, editObj, (err, post) => {
                         if (err) {
                             console.log('***   Error ', err);
                             return next(err);
