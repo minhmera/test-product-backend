@@ -75,8 +75,8 @@ const multerS3Config = multerS3({
         cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, callback) {
-        //console.log('Upload image req ==>  ',req )
-        //console.log('Upload image file ==>  ',file )
+        console.log('Upload image req ==>  ',req.body )
+        console.log('Upload image file ==>  ',file,file.size)
 
         let dateString = Date.now()
         let formatString = 'DD-MM-YYYY'
@@ -90,7 +90,8 @@ const multerS3Config = multerS3({
         let fullPath = 'user_upload/images/'+ newFileName;
         console.log(" fullPath  ==>  ", fullPath)
         callback(null, fullPath);
-        //callback(null, Date.now().toString() + '-' + file.originalname)
+
+
     }
 });
 
@@ -98,7 +99,7 @@ const upload = multer({
     storage: multerS3Config,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 1024 * 1024 * 20 // we are allowing only 20 MB files
+        fileSize: 1024 * 1024 * 5 // we are allowing only 20 MB files
     }
 })
 
