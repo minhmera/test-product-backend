@@ -2701,7 +2701,7 @@
     ]
   },
   {
-    "id": "51",
+    "id": "52",
     "code": "LS",
     "name": "Lạng Sơn",
     "districts": [
@@ -2752,7 +2752,7 @@
     ]
   },
   {
-    "id": "52",
+    "id": "53",
     "code": "QNI",
     "name": "Quảng Ninh",
     "districts": [
@@ -2815,7 +2815,7 @@
     ]
   },
   {
-    "id": "53",
+    "id": "54",
     "code": "TQ",
     "name": "Tuyên Quang",
     "districts": [
@@ -2850,7 +2850,7 @@
     ]
   },
   {
-    "id": "54",
+    "id": "55",
     "code": "TN",
     "name": "Thái Nguyên",
     "districts": [
@@ -2893,7 +2893,7 @@
     ]
   },
   {
-    "id": "55",
+    "id": "56",
     "code": "PT",
     "name": "Phú Thọ",
     "districts": [
@@ -2952,7 +2952,7 @@
     ]
   },
   {
-    "id": "56",
+    "id": "57",
     "code": "BG",
     "name": "Bắc Giang",
     "districts": [
@@ -2999,7 +2999,7 @@
     ]
   },
   {
-    "id": "57",
+    "id": "58",
     "code": "HB",
     "name": "Hòa Bình",
     "districts": [
@@ -3051,7 +3051,7 @@
   },
 
   {
-    "id": "58",
+    "id": "59",
     "code": "LCA",
     "name": "Lào Cai",
     "districts": [
@@ -3094,7 +3094,7 @@
     ]
   },
   {
-    "id": "59",
+    "id": "60",
     "code": "SL",
     "name": "Sơn La",
     "districts": [
@@ -3150,7 +3150,7 @@
   },
 
   {
-    "id": "60",
+    "id": "61",
     "code": "YB",
     "name": "Yên Bái",
     "districts": [
@@ -3194,7 +3194,7 @@
   },
 
   {
-    "id": "61",
+    "id": "62",
     "code": "DDB",
     "name": "Điện Biên",
     "districts": [
@@ -3241,7 +3241,7 @@
     ]
   },
   {
-    "id": "62",
+    "id": "63",
     "code": "LCH",
     "name": "Lai Châu",
     "districts": [

@@ -11,6 +11,7 @@ var routes = require('./routes/index');
 var categories = require('./routes/categories');
 var productList = require('./routes/product_list');
 var getLocation = require('./routes/get_location');
+var general = require('./routes/general');
 var imageUpload = require('./routes/image_upload');
 var auth = require('./routes/auth');
 
@@ -127,6 +128,7 @@ app.use('/', routes);
 app.use('/categories', categories);
 app.use('/productList', productList);
 app.use('/getLocation', getLocation);
+app.use('/general', general);
 app.use('/image-upload', imageUpload);
 app.use('/auth', auth);
 
