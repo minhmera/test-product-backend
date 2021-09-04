@@ -8,7 +8,8 @@ router.get('/appInfo', function (req, res, next) {
         latestVersionAndroid: '1.0',
         appStoreUrl: 'https://apps.apple.com/us/app/facebook/id284882215',
         chPlayUrl: 'https://play.google.com/store/apps/details?id=com.facebook.katana&hl=en&gl=US',
-        message: ''
+        message: '',
+        fbGroupUrl:'https://www.facebook.com/groups/816433045687192'
     }
     res.json({appInfo})
 });
