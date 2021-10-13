@@ -19,7 +19,7 @@ router.post('/getByFullName', function (req, res, next) {
 
     Users.findOne({'local.fullName': req.body.fullName}, function (err, user) {
         if (user) {
-            let filterOpt = {userId: {$regex: user._id, $options: 'i'}}
+            let filterOpt = {userId: {$regex: user._id, $options: 'i'},"isApprove": true}
             console.log('getByFullName req ==> ', user)
             sellingPosts
                 .find(filterOpt)
