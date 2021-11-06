@@ -18,6 +18,7 @@ var auth = require('./routes/auth');
 var sellingPost = require('./routes/selling_post');
 var searchSellingPost = require('./routes/search_selling_post');
 var buyingPost = require('./routes/buying_post');
+var shoppingCart  = require('./routes/shopping_cart');
 
 
 
@@ -118,6 +119,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/productList', authCheckMiddleware);
 app.use('/sellingPost', authCheckMiddleware);
 app.use('/buyingPost', authCheckMiddleware);
+app.use('/shoppingCart', authCheckMiddleware);
 //app.use('/auth', authCheckMiddleware);
 //app.use('/categories', authCheckMiddleware);
 //app.use('/image-upload', authCheckMiddleware);
@@ -135,6 +137,7 @@ app.use('/auth', auth);
 app.use('/sellingPost', sellingPost);
 app.use('/searchSellingPost', searchSellingPost);
 app.use('/buyingPost', buyingPost);
+app.use('/shoppingCart', shoppingCart);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

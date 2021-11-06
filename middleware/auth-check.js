@@ -9,7 +9,7 @@ const config = require('../config/config');
 
 module.exports = (req, res, next) => {
     //console.log('****  middleware  request headers ', req.headers, "   Method  ",req.method)
-    //console.log('****  Middleware  body ==>   ',req.body)
+    console.log('****  Middleware  token ==>   ',req.headers.authorization)
 
     if(req.method == "GET"){
         return next();

@@ -31,7 +31,8 @@ router.get('/loginFailed', function (req, res, next) {
 router.get('/loginSuccess', function (req, res, next) {
     //console.log('***   LoginSuccess callBack   headers ', req.headers)
     const payload = {
-        sub: req.user._id
+       // sub: req.user._id
+        userId: req.user._id
     };
     const token = jwt.sign(payload, config.jwtSecret);
     console.log('***   LoginSuccess callBack   user ', req.user)
