@@ -28,7 +28,7 @@
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "express-session": "^1.15.6",
-    "jsonwebtoken": "^8.1.0",
+    "jsonwebtoken": "^9.0.0",
     "jwt-simple": "^0.5.1",
     "moment": "^2.29.1",
     "mongodb": "^3.6.2",
